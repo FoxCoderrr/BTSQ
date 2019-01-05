@@ -22,7 +22,7 @@
             <td>
               <button
                 class="btn"
-                :class="[coin_info.day_rise_fall_color!='red'?'up_btn':'down_btn']"
+                :class="[coin_info.day_rise_fall_color!='green'?'up_btn':'down_btn']"
               >{{coin_info.day_rise_fall}}</button>
             </td>
           </tr>
