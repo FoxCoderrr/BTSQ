@@ -35,10 +35,15 @@ import Share from '@/pages/share'
 import Service from '@/pages/service'
 import SafeCenter from '@/pages/safecenter'
 import SysSetting from '@/pages/sysSetting'
+import Msg from '@/pages/msg'
+import MsgDetail from '@/pages/msgDetail'
+import Book from '@/pages/book'
+import BookDetail from '@/pages/BookDetail'
 import BankCard from '@/pages/bankcard'
 import AddCard from '@/pages/addcard'
 import Alipay1 from '@/pages/alipay1'
 import WeChat1 from '@/pages/weChat1'
+import Paypal from '@/pages/paypal'
 import ChangePhone from '@/pages/changePhone'
 import ChangePhone1 from '@/pages/changePhone1'
 import ChangePhone2 from '@/pages/changePhone2'
@@ -261,7 +266,7 @@ export default new Router({
       }
     },
     {
-      path: '/trade1/topay',
+      path: '/trade1/topay/id=:id&id1=:id1',
       name: 'topay',
       components: {
         main: ToPay,
@@ -393,6 +398,50 @@ export default new Router({
       }
     },
     {
+      path: '/msg',
+      name: 'msg',
+      components: {
+        main: Msg,
+      },
+      meta: {
+        index: 4,
+        keepAlive:true
+      }
+    },
+    {
+      path: '/msgdetail',
+      name: 'msgdetail',
+      components: {
+        main: MsgDetail,
+      },
+      meta: {
+        index: 5,
+        keepAlive:true
+      }
+    },
+    {
+      path: '/book',
+      name: 'book',
+      components: {
+        main: Book,
+      },
+      meta: {
+        index: 4,
+        keepAlive:true
+      }
+    },
+    {
+      path: '/bookdetail/type=:type',
+      name: 'bookdetail',
+      components: {
+        main: BookDetail,
+      },
+      meta: {
+        index: 5,
+        keepAlive:true
+      }
+    },
+    {
       path: '/bankcard',
       name: 'bankcard',
       components: {
@@ -418,6 +467,16 @@ export default new Router({
       name: 'wechat1',
       components: {
         main: WeChat1,
+      },
+      meta: {
+        index: 5,
+      }
+    },
+    {
+      path: '/paypal/type=:type',
+      name: 'paypal',
+      components: {
+        main: Paypal,
       },
       meta: {
         index: 5,

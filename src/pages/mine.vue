@@ -59,6 +59,16 @@
             <span class="f_l">{{$t('mine.list.l4')}}</span>
             <span class="f_r iconfont icon-youjiantou"></span>
           </li>
+          <li @click="toMsg">
+            <img src="../assets/tongzhi.png" alt class="f_l">
+            <span class="f_l m_span">{{$t('mine.list.l6')}} <span class="dot f_c_red"></span> </span>
+            <span class="f_r iconfont icon-youjiantou"></span>
+          </li>
+          <li @click="toBook">
+            <img src="../assets/xiazai.png" alt class="f_l">
+            <span class="f_l">{{$t('mine.list.l7')}}</span>
+            <span class="f_r iconfont icon-youjiantou"></span>
+          </li>
         </ul>
         <ul>
           <li @click="toChat">
@@ -168,6 +178,16 @@ export default {
         name: "message"
       });
     },
+    toMsg(){
+      this.$router.push({
+        name: "msg"
+      });
+    },
+     toBook(){
+      this.$router.push({
+        name: "book"
+      });
+    },
     toLink(i) {
       if (i) {
         this.$router.push({
@@ -189,7 +209,7 @@ export default {
   height: 100%;
   color: white;
   box-sizing: border-box;
-  padding: 1.3rem 0 1.5rem;
+  padding: 1.3rem 0 2rem;
   overflow: auto;
   .top {
     background: #1a212a;
@@ -290,6 +310,18 @@ export default {
           height: 0.8rem;
           transform: translateY(3px);
           margin-right: 0.4rem;
+        }
+        .m_span{
+          position: relative;
+          .dot{
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #E53917;
+            border-radius: 50%;
+            right: -8px;
+            top: 10px;
+          }
         }
       }
       li:last-child {

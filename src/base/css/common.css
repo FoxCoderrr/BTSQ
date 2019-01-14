@@ -385,6 +385,9 @@ body{
 .weui-mask_transparent{
   z-index: 99999999!important;
 }
+.weui-actionsheet{
+  z-index: 999999999!important;
+}
 .vux-loadmore.weui-loadmore_line:before, .vux-loadmore.weui-loadmore_line:after{
   border-color: #999!important;
 }

@@ -2,6 +2,17 @@ export default {
   language: {
     name: "English"
   },
+  book:{
+    title:"White-paper",
+  },
+  msg:{
+    title:{
+      t1:"Unread",
+      t2:"Have read",
+      t3:"Detail",
+    }
+  },
+  total:"Total：",
   none:"Not yet open,please wait！",
   bind:"Bound",
   unbind:"Not bound",
@@ -302,14 +313,26 @@ export default {
         i3: "Enter trade password",
         t1: "Equal",
         max:"Max",
-      }
+      },
+      pgs:{
+        p1:"ID",
+        p2:"Sum",
+        p3:"Left time",
+        p4:"Action",
+        b1:"to pay",
+        b2:"Receipted",
+        b3:"Finished",
+        b4:"Unpaid",
+        b5:"paid",
+        b6:"Unconfirmed"
+      },
     },
     child2: {
       tab: {
         t1: "Buy",
         t2: "Sell",
-        t3: "Buy Progress",
-        t4: "Sell Progress"
+        t3: "Buy info",
+        t4: "Sell info"
       },
       list: {
         t1: "Time",
@@ -337,6 +360,33 @@ export default {
       detail:"Detail"
     }
   },
+  topay:{
+    title:"Seller info",
+    t1:"Paypal info",
+    t2:"Bank card info",
+    t3:"Alipay info",
+    t4:"Wechat info",
+    list1:{
+      l1:"Card No.",
+      l2:"Bank",
+      l3:"Name",
+      l4:"Address",
+    },
+    list2:{
+      l1:"Alipay",
+      l2:"Name",
+    },
+    list3:{
+      l1:"Nickname",
+      l2:"Collect"
+    },
+    tip:{
+      t1:"Submit for paying",
+      t2:"Submit success",
+      t3:"Success",
+      t4:"Confirm"
+    }
+  },
   mine: {
     title:"Mine",
     top: {
@@ -349,7 +399,9 @@ export default {
       l2: "Share",
       l3: "Security",
       l4: "Setting",
-      l5: "Service"
+      l5: "Service",
+      l6:"Message",
+      l7:"White Paper",
     },
     btn: {
       b1: "Sign Out"
@@ -548,7 +600,8 @@ export default {
       l1: "Bank Card",
       l2: "Alipay",
       l3: "Wechat",
-      l4: "Language"
+      l4: "Language",
+      l5:"Paypal"
     }
   },
   card: {
@@ -578,7 +631,7 @@ export default {
   alipay: {
     title: {
       t1: "Bind Alipay",
-      t1: "Alipay Info"
+      t2: "Alipay Info"
     },
     label: {
       l1: "Alipay",
@@ -602,6 +655,18 @@ export default {
     phr: {
       p1: "Click to upload",
       p2: "Enter wechat nickname"
+    }
+  },
+  paypel:{
+    title:{
+      t1:"Bind Paypal",
+      t2:"Paypal Info",
+    },
+    label:{
+      l1:"Paypal"
+    },
+    phr:{
+      p1:"Enter paypal account"
     }
   },
   service: {

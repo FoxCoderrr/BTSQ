@@ -2,54 +2,61 @@
   <div class="wrap">
     <div class="top">
       <img @click="back" class="back_img" src="../assets/nav_back.png" alt>
-      <div>支付信息</div>
+      <div>{{$t('topay.title')}}</div>
     </div>
     <div class="main">
-      <div class="ul_title">银行卡信息</div>
-      <ul>
+      <div v-if="info.paypal" class="ul_title">{{$t('topay.t1')}}</div>
+      <ul v-if="info.paypal">
         <li>
-          <span>银行卡账号：</span>
-          <span>13300000001</span>
-        </li>
-        <li>
-          <span>开户行：</span>
-          <span>中国建设银行</span>
-        </li>
-        <li>
-          <span>开户姓名：</span>
-          <span>张三</span>
-        </li>
-        <li>
-          <span>开户行资料：</span>
-          <span>北京北京市朝阳区支行</span>
+          <span>Paypal：</span>
+          <span>{{info.paypal}}</span>
         </li>
       </ul>
-      <div class="ul_title">支付宝信息</div>
-      <ul>
+      <div v-if="info.bank_card" class="ul_title">{{$t('topay.t2')}}</div>
+      <ul v-if="info.bank_card">
         <li>
-          <span>支付宝账号：</span>
-          <span>13300000001</span>
+          <span>{{$t('topay.list1.l1')}}：</span>
+          <span>{{info.bank_card}}</span>
         </li>
         <li>
-          <span>真实姓名：</span>
-          <span>张三</span>
+          <span>{{$t('topay.list1.l2')}}：</span>
+          <span>{{info.bank_text}}</span>
+        </li>
+        <li>
+          <span>{{$t('topay.list1.l3')}}：</span>
+          <span>{{info.open_name}}</span>
+        </li>
+        <li>
+          <span>{{$t('topay.list1.l4')}}：</span>
+          <span>{{info.bank_add}}</span>
         </li>
       </ul>
-      <div class="ul_title">微信信息</div>
+      <div class="ul_title">{{$t('topay.t3')}}</div>
       <ul>
         <li>
-          <span>微信昵称：</span>
-          <span>13300000001</span>
+          <span>{{$t('topay.list2.l1')}}：</span>
+          <span>{{info.alipay_account}}</span>
         </li>
         <li>
-          <span>收款码：</span>
+          <span>{{$t('topay.list2.l2')}}：</span>
+          <span>{{info.alipay_name}}</span>
+        </li>
+      </ul>
+      <div class="ul_title">{{$t('topay.t4')}}</div>
+      <ul>
+        <li>
+          <span>{{$t('topay.list3.l1')}}：</span>
+          <span>{{info.wechat_nick}}</span>
+        </li>
+        <!-- <li>
+          <span>{{$t('topay.list3.l2')}}：</span>
           <span>
             <img src="../assets/logo.png" alt @click="showImg">
           </span>
-        </li>
+        </li>-->
       </ul>
       <div class="d_btn">
-        <button class="btn" @click="sub">我已完成支付，点击确认</button>
+        <button class="btn" @click="sub">{{$t('topay.tip.t1')}}</button>
       </div>
     </div>
     <div class="mask" v-if="big_if" @click="big_if = false">
@@ -66,41 +73,98 @@ export default {
   data() {
     return {
       big_if: false,
-      src: src
+      src: src,
+      info: {}
     };
   },
   components: {},
   mounted() {
     let that = this;
     mui.back = function() {
-      that.$router.back();
+      that.$router.push({
+        name: "orderdetail",
+        params: {
+          type: 2
+        }
+      });
       error;
     };
+    that
+      .$http({
+        url: "/Transaction/pay_info",
+        method: "post",
+        data: {
+          token: that.$store.state.user_info.token,
+          seller_id: that.$route.params.id,
+          order_id: that.$route.params.id1
+        }
+      })
+      .then(function(res) {
+        if (res.data.code == 1) {
+          that.info = res.data.data.list;
+        } else {
+          that.$vux.toast.show({
+            text: res.data.msg,
+            type: "cancel",
+            position: "middle",
+            time: 1200
+          });
+        }
+      });
   },
   methods: {
     back() {
-      this.$router.back();
+      this.$router.push({
+        name: "orderdetail",
+        params: {
+          type: 2
+        }
+      });
     },
     showImg() {
       this.big_if = true;
     },
     sub() {
       let that = this;
-      that.$vux.alert.show({
-        title: "成功",
-        content: "确认支付成功！",
-        buttonText: "确认",
-        onShow() {},
-        onHide() {
-          that.dialog0 = false;
-          that.$router.push({
-            name: "orderdetail",
-            params:{
-                type:2
-            }
-          });
-        }
+      that.$vux.loading.show({
+        text: ""
       });
+      that
+        .$http({
+          url: "/Transaction/do_pay",
+          method: "post",
+          data: {
+            token: that.$store.state.user_info.token,
+            order_id: that.$route.params.id1
+          }
+        })
+        .then(function(res) {
+          that.$vux.loading.hide();
+          if (res.data.code == 1) {
+            that.$vux.alert.show({
+              title: that.$t('topay.tip.t3'),
+              content: that.$t('topay.tip.t2'),
+              buttonText: that.$t('topay.tip.t4'),
+              onShow() {},
+              onHide() {
+                that.dialog0 = false;
+                that.$router.push({
+                  name: "orderdetail",
+                  params: {
+                    type: 2
+                  }
+                });
+              }
+            });
+          } else {
+            that.$vux.toast.show({
+              text: res.data.msg,
+              type: "cancel",
+              position: "middle",
+              time: 1200
+            });
+          }
+        });
     }
   }
 };

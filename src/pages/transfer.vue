@@ -73,7 +73,7 @@
       <div class="dialog">
         <div class="dia_title">{{$t('codedialog.c1')}}</div>
         <div class="dia_con">
-          <div class="code_title">{{info.email}}{{$t('codedialog.c2')}}</div>
+          <div class="code_title">{{info.email}} {{$t('codedialog.c2')}}</div>
           <div>
             <input type="text" class="code_input" v-model="email_code" :placeholder="$t('codedialog.c3')">
           </div>

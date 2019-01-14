@@ -9,10 +9,10 @@
         :scroll-threshold="5"
         v-model="type"
       >
-        <tab-item selected @click.native="navTap(0)">我的买入</tab-item>
-        <tab-item @click.native="navTap(1)">我的卖出</tab-item>
-        <!-- <tab-item @click.native="navTap(2)">买入进度</tab-item>
-        <tab-item @click.native="navTap(3)">卖出进度</tab-item>-->
+        <tab-item selected @click.native="navTap(0)">{{$t('trade.child2.tab.t1')}}</tab-item>
+        <tab-item @click.native="navTap(1)">{{$t('trade.child2.tab.t2')}}</tab-item>
+        <tab-item @click.native="navTap(2)">{{$t('trade.child2.tab.t3')}}</tab-item>
+        <tab-item @click.native="navTap(3)">{{$t('trade.child2.tab.t4')}}</tab-item>
       </tab>
       <div class="scroll_div">
         <van-pull-refresh
@@ -53,56 +53,35 @@
             <x-table v-if="type==2||type==3" :content-bordered="false" :cell-bordered="false">
               <thead>
                 <tr>
-                  <th>订单编号</th>
-                  <th>总额(USD≈CNY)</th>
-                  <th>交易时间</th>
-                  <th>操作</th>
+                  <th>{{$t('trade.child1.pgs.p1')}}</th>
+                  <th>{{$t('trade.child1.pgs.p2')}}({{$store.state.active_market.name}}≈CNY)</th>
+                  <th>{{$t('trade.child1.pgs.p3')}}</th>
+                  <th>{{$t('trade.child1.pgs.p4')}}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1330000000002</td>
+                <tr v-for="(item,index) in list">
+                  <td>{{item.order}}</td>
                   <td>
-                    <span>1200.00</span>
-                    <span>≈100.00</span>
+                    <span>{{item.total_usdt}}</span>
+                    <span>≈{{item.total_cny}}</span>
                   </td>
-                  <td>3:00:00</td>
+                  <td>{{item.left_time}}</td>
                   <td>
-                    <button class="btn" @click="toPay">去支付</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1330000000002</td>
-                  <td>
-                    <span>1200.00</span>
-                    <span>≈100.00</span>
-                  </td>
-                  <td>3:00:00</td>
-                  <td>
-                    <span>已支付</span>
-                    <span>等待确认</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1330000000002</td>
-                  <td>
-                    <span>1200.00</span>
-                    <span>≈100.00</span>
-                  </td>
-                  <td>3:00:00</td>
-                  <td>
-                    <button class="btn" @click="confirmReceive">已收款</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>1330000000002</td>
-                  <td>
-                    <span>1200.00</span>
-                    <span>≈100.00</span>
-                  </td>
-                  <td>3:00:00</td>
-                  <td>
-                    <span>等待收款</span>
+                    <button
+                      v-if="type==2&&item.operation_type==1"
+                      class="btn"
+                      @click="toPay(item.seller_id,item.order_id)"
+                    >{{$t('trade.child1.pgs.b1')}}</button>
+                    <button
+                      v-if="type==3&&item.operation_type==2"
+                      class="btn"
+                      @click="confirmReceive(item.order_id)"
+                    >{{$t('trade.child1.pgs.b2')}}</button>
+                    <span v-if="item.operation_type==3">{{$t('trade.child1.pgs.b3')}}</span>
+                    <span v-if="type==3&&item.operation_type==1">{{$t('trade.child1.pgs.b4')}}</span>
+                    <span v-if="type==2&&item.operation_type==2">{{$t('trade.child1.pgs.b5')}}</span>
+                    <span v-if="type==2&&item.operation_type==2">{{$t('trade.child1.pgs.b6')}}</span>
                   </td>
                 </tr>
               </tbody>
@@ -161,6 +140,7 @@ export default {
   },
   methods: {
     navTap(i) {
+      clearInterval(window.t);
       this.type = i;
       let that = this;
       that.loading = false;
@@ -169,14 +149,44 @@ export default {
       that.list = [];
       that.getlist(1);
     },
+    timeArr() {
+      let that = this;
+      window.t = setInterval(function() {
+        for (let i in that.list) {
+          let h, m, s;
+          let now = new Date().getTime();
+          let leftTime = that.list[i].left_times - now / 1000;
+          if (leftTime > 0) {
+            h = Math.floor((leftTime / 60 / 60) % 24);
+            m = Math.floor((leftTime / 60) % 60);
+            s = Math.floor(leftTime % 60);
+            if (m < 10) {
+              m = "0" + m;
+            }
+            if (s < 10) {
+              s = "0" + s;
+            }
+            that.list[i].left_time = h + ":" + m + ":" + s;
+          } else {
+            h = "00";
+            m = "00";
+            s = "00";
+            that.list[i].left_time = h + ":" + m + ":" + s;
+            // that.list.splice(i,1);
+          }
+        }
+      }, 1000);
+    },
     cancel(id) {
       let that = this;
       that.$vux.confirm.show({
-        title: that.$t('confirm.card.title.t5'),
-        confirmText: that.$t('cfm'),
-        cancelText: that.$t('cel'),
+        title: that.$t("confirm.card.title.t5"),
+        confirmText: that.$t("cfm"),
+        cancelText: that.$t("cel"),
         content:
-          "<div style='text-align:left'>"+that.$t('confirm.card.con.c5')+"</div>",
+          "<div style='text-align:left'>" +
+          that.$t("confirm.card.con.c5") +
+          "</div>",
         onShow() {},
         onHide() {},
         onCancel() {},
@@ -215,12 +225,16 @@ export default {
         }
       });
     },
-    toPay() {
+    toPay(id, id1) {
       this.$router.push({
-        name: "topay"
+        name: "topay",
+        params: {
+          id: id,
+          id1: id1
+        }
       });
     },
-    confirmReceive() {
+    confirmReceive(id) {
       let that = this;
       that.$vux.confirm.show({
         title: "放币",
@@ -230,10 +244,50 @@ export default {
         onShow() {},
         onHide() {},
         onCancel() {},
-        onConfirm() {}
+        onConfirm() {
+          that.$vux.loading.show({
+            text: ""
+          });
+          that
+            .$http({
+              url: "/Transaction/do_done",
+              method: "post",
+              data: {
+                token: that.$store.state.user_info.token,
+                order_id: id
+              }
+            })
+            .then(function(res) {
+              that.$vux.loading.hide();
+              if (res.data.code == 1) {
+                that.$vux.toast.show({
+                  text: res.data.msg,
+                  type: "success",
+                  position: "middle",
+                  time: 1200
+                });
+                for(let v of that.list){
+                  if(v.order_id == id){
+                    v.operation_type=3;
+                    let tt = (new Date().getTime())/1000;
+                    v.left_times = tt;
+                    break;
+                  }
+                }
+              } else {
+                that.$vux.toast.show({
+                  text: res.data.msg,
+                  type: "cancel",
+                  position: "middle",
+                  time: 1200
+                });
+              }
+            });
+        }
       });
     },
     onRefresh() {
+      clearInterval(window.t);
       let that = this;
       that.isLoading = true;
       that.loading = false;
@@ -249,6 +303,7 @@ export default {
       that.getlist();
     },
     getlist(i) {
+      clearInterval(window.t);
       let that = this;
       if (i) {
         that.lif = true;
@@ -278,10 +333,15 @@ export default {
           that.lif = false;
           that.isLoading = false;
           if (res.data.code == 1) {
+            if (that.type == 2 || that.type == 3) {
+              that.timeArr();
+            }
             if (res.data.data.list.length) {
-              for (let v of res.data.data.list) {
-                v.time1 = v.start_date.toString().split(" ")[0];
-                v.time2 = v.start_date.toString().split(" ")[1];
+              if (that.type == 0 || that.type == 1) {
+                for (let v of res.data.data.list) {
+                  v.time1 = v.start_date.toString().split(" ")[0];
+                  v.time2 = v.start_date.toString().split(" ")[1];
+                }
               }
               that.list = that.list.concat(res.data.data.list);
             } else {

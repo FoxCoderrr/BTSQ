@@ -7,6 +7,7 @@ Vue.use(vuex);
 export default new vuex.Store({
   state: { //$store.state.a调用
     a: 1,
+    imgIf:true,
     n:0,
     bot:"",
     lang:"cn",
@@ -77,10 +78,10 @@ export default new vuex.Store({
       }, 1000)
     },
   },
-  actions: {
-
+  actions: {//$store.dispatch('handler')调用
+    
   },
-  getters: {
+  getters: {//计算属性
 
   },
 })

@@ -10,19 +10,21 @@
           <span class="f_l">{{$t('market.topinfo.t1')}}：{{t_info.price_new}} USD</span>
           <span
             class="f_r"
-            :class="[t_info.fall_type==1?'f_c_red':'f_c_green']"
+            :class="[t_info.fall_type==2?'f_c_red':'f_c_green']"
           >{{$t('market.topinfo.t2')}}：{{t_info.day_rise_fall}}</span>
         </div>
         <div>
           <span class="f_l">{{$t('market.topinfo.t3')}}：{{t_info.high}}&nbsp;&nbsp;&nbsp;</span>
           <span class="f_l">{{$t('market.topinfo.t4')}}：{{t_info.low}}</span>
-          <span class="f_r">24H{{$t('market.topinfo.t5')}}：{{t_info.twenty_four_volume}} {{$store.state.active_market.name}}</span>
+          <span
+            class="f_r"
+          >24H{{$t('market.topinfo.t5')}}：{{t_info.twenty_four_volume}} {{$store.state.active_market.name}}</span>
         </div>
       </div>
       <!-- 图 -->
       <div class="k_sort">
         <span :class="{f_c:k_type==0}" @click="timeline">{{$t('market.chart.c1')}}</span>
-        <select v-model="s_type" @click="deKline"  @change="kline" :class="{f_c:k_type!=0}">
+        <select v-model="s_type" @click="deKline" @change="kline" :class="{f_c:k_type!=0}">
           <option value="1">1{{$t('market.chart.c2')}}</option>
           <option value="2">1{{$t('market.chart.c3')}}</option>
           <option value="3">1{{$t('market.chart.c4')}}</option>
@@ -45,20 +47,20 @@
         <div v-if="o_type==1" class="bs_info">
           <div class="line"></div>
           <div>
-            <div>{{$t('market.order.list1.t1')}}</div>
+            <div>{{$t('market.order.list1.t1')}}<span class="total">{{$t('total')}}{{b_total}}</span></div>
             <ul>
               <li v-for="(item,index) in b_list" :key="index">
-                <span class="f_l">{{item.number}}USD</span>
-                <span class="f_r f_c_red">{{item.price}}</span>
+                <span class="f_l">{{item.price}}USD</span>
+                <span class="f_r f_c_red">{{item.number}}</span>
               </li>
             </ul>
           </div>
           <div>
-            <div>{{$t('market.order.list1.t2')}}</div>
+            <div>{{$t('market.order.list1.t2')}}<span class="total">{{$t('total')}}{{s_total}}</span></div>
             <ul>
               <li v-for="(item,index) in s_list" :key="index">
-                <span class="f_l">{{item.number}}USD</span>
-                <span class="f_r f_c_green">{{item.price}}</span>
+                <span class="f_l">{{item.price}}USD</span>
+                <span class="f_r f_c_green">{{item.number}}</span>
               </li>
             </ul>
           </div>
@@ -104,7 +106,9 @@ export default {
       t_info: {},
       b_list: [],
       s_list: [],
-      l_list: []
+      l_list: [],
+      b_total:0,
+      s_total:0,
     };
   },
   components: {
@@ -120,11 +124,11 @@ export default {
     that.kline();
     // 页面信息
     that.getInfo();
-    window.t = setInterval(that.getInfo,3000);
+    window.t = setInterval(that.getInfo, 3000);
   },
-  watch:{
-    k_type(n,o){
-      if(o==0){
+  watch: {
+    k_type(n, o) {
+      if (o == 0) {
         this.kline();
       }
     }
@@ -153,6 +157,18 @@ export default {
             that.b_list = res.data.data.buy_list;
             that.s_list = res.data.data.sell_list;
             that.l_list = res.data.data.latest_deal;
+            if(that.b_list){
+              that.b_total=0;
+              for(let v of that.b_list){
+                that.b_total+=v.number;
+              }
+            }
+            if(that.s_list){
+              that.s_total=0;
+              for(let v of that.s_list){
+                that.s_total+=Number(v.number);
+              }
+            }
           } else {
             that.$vux.toast.show({
               text: res.data.msg,
@@ -179,7 +195,7 @@ export default {
         text: ""
       });
       timelineAjax();
-      function timelineAjax(){
+      function timelineAjax() {
         that
           .$http({
             url: "/show_kline/line_graph",
@@ -195,6 +211,27 @@ export default {
             var time_line_data = that.splitData1(res.data);
             that.build_timeline(time_line_data);
           });
+          // var test_data=[
+          //   {time: "2019.01.04 10:03", open: 1, low: 10, high: 10, vol: 55, close: 10},
+          //   {time: "2019.01.04 10:05", open: 10, low: 0, high: 0, vol: 10, close: 20},
+          //   {time: "2019.01.04 10:06", open: 20, low: 0, high: 0, vol: 20, close: 20},
+          //   {time: "2019.01.04 10:07", open: 30, low: 0, high: 0, vol: 10, close: 20},
+          //   {time: "2019.01.04 10:08", open: 20, low: 0, high: 0, vol: 20, close: 20},
+          //   {time: "2019.01.04 10:09", open: 20, low: 0, high: 0, vol: 10, close: 20},
+          //   {time: "2019.01.04 10:10", open: 20, low: 0, high: 0, vol: 20, close: 20},
+          //   {time: "2019.01.04 10:11", open: 20, low: 0, high: 0, vol: 10, close: 30},
+          //   {time: "2019.01.04 10:12", open: 20, low: 0, high: 0, vol: 20, close: 30},
+          //   {time: "2019.01.04 10:13", open: 20, low: 0, high: 0, vol: 10, close: 30},
+          //   {time: "2019.01.04 10:14", open: 20, low: 0, high: 0, vol: 20, close: 30},
+          //   {time: "2019.01.04 10:15", open: 20, low: 0, high: 0, vol: 10, close: 30},
+          //   {time: "2019.01.04 10:16", open: 20, low: 0, high: 0, vol: 20, close: 30},
+          //   {time: "2019.01.04 10:17", open: 20, low: 0, high: 0, vol: 20, close: 30},
+          //   {time: "2019.01.04 10:18", open: 20, low: 0, high: 0, vol: 10, close: 30},
+          //   {time: "2019.01.04 10:19", open: 20, low: 0, high: 0, vol: 20, close: 30},
+          // ]
+          // that.$vux.loading.hide();
+          // var time_line_data = that.splitData1(test_data);
+          // that.build_timeline(time_line_data);
       }
     },
     deKline() {
@@ -207,7 +244,7 @@ export default {
         text: ""
       });
       klineAjax();
-      function klineAjax(){
+      function klineAjax() {
         that
           .$http({
             url: "/show_kline/line_graph",
@@ -390,18 +427,22 @@ export default {
           formatter: function(params) {
             if (params[0].seriesIndex == 0) {
               return (
-                that.$t('market.chart.tool.t1') +
+                that.$t("market.chart.tool.t1") +
                 params[0].name +
-                "&nbsp;&nbsp;&nbsp;"+that.$t('market.chart.tool.t2') +
+                "&nbsp;&nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t2") +
                 params[0].data[5] +
                 "<br/>" +
-                that.$t('market.chart.tool.t3') +
+                that.$t("market.chart.tool.t3") +
                 params[0].data[4] +
-                " &nbsp;&nbsp;"+that.$t('market.chart.tool.t4') +
+                " &nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t4") +
                 params[0].data[3] +
-                " &nbsp;&nbsp;"+that.$t('market.chart.tool.t5') +
+                " &nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t5") +
                 params[0].data[2] +
-                " &nbsp;&nbsp;"+that.$t('market.chart.tool.t6') +
+                " &nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t6") +
                 params[0].data[1] +
                 "<br/>" +
                 params[1].seriesName +
@@ -414,9 +455,9 @@ export default {
               );
             } else if (params[0].seriesIndex == 3) {
               return (
-                that.$t('market.chart.tool.t1') +
+                that.$t("market.chart.tool.t1") +
                 params[0].name +
-                that.$t('market.chart.tool.t2') +
+                that.$t("market.chart.tool.t2") +
                 params[5].value +
                 "<br/>" +
                 params[0].seriesName +
@@ -433,9 +474,10 @@ export default {
               );
             } else {
               return (
-                that.$t('market.chart.tool.t1') +
+                that.$t("market.chart.tool.t1") +
                 params[0].name +
-                "&nbsp;&nbsp;&nbsp;&nbsp;"+that.$t('market.chart.tool.t2') +
+                "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t2") +
                 params[5].value
               );
             }
@@ -698,10 +740,21 @@ export default {
               normal: {
                 color: function(params) {
                   var colorList;
-                  if(params.dataIndex != 0){
+                  if (params.dataIndex == 0) {
+                    if (
+                      data.datas[1][1] >
+                      data.datas[0][1]
+                    ) {
+                      colorList = "#01b782";
+                    } else {
+                      colorList = "#d40469";
+                    }
+                    return colorList;
+                  }
+                  if (params.dataIndex != 0) {
                     if (
                       data.datas[params.dataIndex][1] >
-                      data.datas[params.dataIndex-1][1]
+                      data.datas[params.dataIndex - 1][1]
                     ) {
                       colorList = "#d40469";
                     } else {
@@ -790,40 +843,19 @@ export default {
       var price = [];
       var vols = [];
       var datas = [];
-      var ave = [];
       for (var i = 0; i < rawData.length; i++) {
         datas.push(rawData[i]);
         price.push(parseFloat(rawData[i].close));
         vols.push(parseInt(rawData[i].vol));
-        // ave.push(parseFloat(rawData[i].));
         times.push(rawData[i].time.split(" ")[1]);
       }
       return {
         datas: datas,
         times: times,
         price: price,
-        ave: ave,
         vols: vols
       };
     },
-
-    //MA计算公式
-    calculateMA1(dayCount, data) {
-      var result = [];
-      for (var i = 0, len = data.length; i < len; i++) {
-        if (i < dayCount - 1) {
-          result.push("-");
-          continue;
-        }
-        var sum = 0;
-        for (var j = 0; j < dayCount; j++) {
-          sum += data[i - j];
-        }
-        result.push((sum / dayCount).toFixed(2));
-      }
-      return result;
-    },
-
     build_timeline(data) {
       let that = this;
       var option = {
@@ -855,39 +887,18 @@ export default {
           showContent: true,
           position: [0, 0],
           formatter: function(params) {
-            for (var i = 0; i < params.length; i++) {
-              if (params[i].seriesIndex == 0) {
-                //价格折线图
-                var time = params[i].name;
-                var price = params[i].value;
-              } else if (params[i].seriesIndex == 1) {
-                //价格 MA5
-                var price_ma5 = params[i].value;
-              } else if (params[i].seriesIndex == 2) {
-                //价格bar 销量 柱状图
-                var vols = params[i].value;
-              } else if (params[i].seriesIndex == 3) {
-                //销量MA5
-                var vols_ma5 = params[i].value;
-              } else if (params[i].seriesIndex == 4) {
-                //销量MA10
-                var vols_ma10 = params[i].value;
-              }
-            }
+            var time = params[0].name;
+            var price = params[1].value;
+            var vols = params[0].value;
             return (
-              that.$t('market.chart.tool.t1') +
+              that.$t("market.chart.tool.t1") +
               time +
-              "&nbsp;&nbsp;"+that.$t('market.chart.tool.t7') +
+              "&nbsp;&nbsp;" +
+              that.$t("market.chart.tool.t7") +
               price +
-              "&nbsp;&nbsp;MA5:" +
-              price_ma5 +
               "<br>" +
-              that.$t('market.chart.tool.t2') +
-              vols +
-              "&nbsp;&nbsp;MA5：" +
-              vols_ma5 +
-              "&nbsp;&nbsp;MA10：" +
-              vols_ma10
+              that.$t("market.chart.tool.t2") +
+              vols
             );
           },
           crossStyle: {
@@ -901,14 +912,14 @@ export default {
         },
         grid: [
           {
-            left: "0",
-            right: "0",
+            left: "4%",
+            right: "50",
             height: "54%",
-            top: "50"
+            top: "20"
           },
           {
-            left: "0",
-            right: "0",
+            left: "4%",
+            right: "50",
             top: "66%",
             height: "28%"
           }
@@ -973,10 +984,16 @@ export default {
         yAxis: [
           {
             scale: true,
-            position: "left",
+            position: "right",
             boundaryGap: true,
             splitArea: {
               show: false
+            },
+             axisLine: {
+              show: true,
+              lineStyle: {
+                color: "rgba(255,255,255,.7)"
+              }
             },
             splitLine: {
               show: false,
@@ -991,8 +1008,11 @@ export default {
             splitNumber: 3,
             position: "right",
             boundaryGap: true,
-            axisLine: {
-              onZero: false
+             axisLine: {
+              show: true,
+              lineStyle: {
+                color: "rgba(255,255,255,.7)"
+              }
             },
             axisTick: {
               show: false
@@ -1013,7 +1033,7 @@ export default {
           {
             type: "inside",
             xAxisIndex: [0, 1],
-            startValue: data.times.length>30?data.times.length-30:0,
+            startValue: data.times.length > 30 ? data.times.length - 30 : 0,
             endValue: data.times.length - 1
           }
         ],
@@ -1030,20 +1050,28 @@ export default {
               normal: {
                 color: "#ccc"
               }
-            }
-          },
-          {
-            name: "MA5",
-            type: "line",
-            data: that.calculateMA1(5, data.price),
-            smooth: true,
-            symbol: "none",
-            hoverAnimation: false,
-            showSymbol: false,
-            showAllSymbol: false,
-            itemStyle: {
+            },
+            areaStyle: {
+              //区域填充样式
               normal: {
-                color: "#FF9800"
+                color: {
+                  type: "linear",
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "rgba(255,255,255,.5)"
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(255,255,255,.2)"
+                    }
+                  ],
+                  globaCoord: false
+                }
               }
             }
           },
@@ -1057,10 +1085,20 @@ export default {
               normal: {
                 color: function(params) {
                   var colorList;
+                  if(params.dataIndex==0){
+                    if (
+                      data.datas[1].close >
+                      data.datas[0].close
+                    ) {
+                      colorList = "#01b782";
+                    } else {
+                      colorList = "#d40469";
+                    }
+                  }
                   if (params.dataIndex != 0) {
                     if (
-                      data.datas[params.dataIndex].vol >
-                      data.datas[params.dataIndex - 1].vol
+                      data.datas[params.dataIndex].close >
+                      data.datas[params.dataIndex - 1].close
                     ) {
                       colorList = "#d40469";
                     } else {
@@ -1071,28 +1109,6 @@ export default {
                 }
               }
             }
-          },
-          {
-            name: "MA5vols",
-            type: "line",
-            symbol: "none",
-            hoverAnimation: false,
-            showSymbol: false,
-            showAllSymbol: false,
-            xAxisIndex: 1,
-            yAxisIndex: 1,
-            data: that.calculateMA1(5, data.vols)
-          },
-          {
-            name: "MA10vols",
-            type: "line",
-            symbol: "none",
-            hoverAnimation: false,
-            showSymbol: false,
-            showAllSymbol: false,
-            xAxisIndex: 1,
-            yAxisIndex: 1,
-            data: that.calculateMA1(10, data.vols)
           }
         ]
       };
@@ -1167,6 +1183,9 @@ export default {
         padding: 0 4% 0;
         display: flex;
         position: relative;
+        .total{
+          float: right;
+        }
         > .line {
           position: absolute;
           height: 100%;

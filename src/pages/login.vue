@@ -1,18 +1,19 @@
 <template>
   <div class="wrap">
-    <div class="top">
+    <img v-if="$store.state.imgIf" class="start" src="../assets/start.gif" alt>
+    <div class="top" v-if="!$store.state.imgIf">
       <select class="lang" v-model="lang" @change="changeLang">
         <option value="cn">{{$t('ch')}}</option>
         <option value="ct">{{$t('ch1')}}</option>
         <option value="en">{{$t('en')}}</option>
       </select>
     </div>
-    <div class="d_logo">
+    <div class="d_logo" v-if="!$store.state.imgIf">
       <img src="../assets/logo.png" alt>
       <span class="f_c">BOUDCOIN</span>
       <span>COMMUNITY</span>
     </div>
-    <div class="form">
+    <div class="form" v-if="!$store.state.imgIf">
       <div class="d_input">
         <div class="f_l">{{$t('login.email')}}</div>
         <div class="f_r">
@@ -40,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="form_bot">
+    <div class="form_bot" v-if="!$store.state.imgIf">
       <button class="btn" @click="sub">{{$t('login.sub')}}</button>
       <div>
         <span class="f_r">
@@ -80,7 +81,7 @@
       <div class="dialog">
         <div class="dia_title">{{$t('codedialog.c1')}}</div>
         <div class="dia_con">
-          <div class="code_title">{{u_phone}}{{$t('codedialog.c2')}}</div>
+          <div class="code_title">{{u_phone}} {{$t('codedialog.c2')}}</div>
           <div>
             <input
               type="text"
@@ -128,8 +129,28 @@ export default {
     SIdentify,
     Verify
   },
+  beforeCreate() {
+    function plusReady() {
+      // 设置系统状态栏背景为黑色
+      plus.navigator.setStatusBarBackground("#010101");
+    }
+    if (window.plus) {
+      plusReady();
+    } else {
+      document.addEventListener("plusready", plusReady, false);
+    }
+  },
+  created() {
+    let that = this;
+    setTimeout(function() {
+      that.$store.state.imgIf = false;
+    }, 4000);
+  },
   mounted() {
     let that = this;
+    //  setTimeout(function () {
+    //   that.$store.state.imgIf = false;
+    // },4000)
     that.refresh();
     that.lang = that.$store.state.lang;
     let height =
@@ -165,12 +186,59 @@ export default {
         .then(function(res) {});
     },
     sucCode(o) {
-      this.$router.push({
-        name: "home"
-      });
+      let that = this;
+      let ll = "";
+      if (that.$store.state.lang == "cn") {
+        ll = 1;
+      } else if (that.$store.state.lang == "ct") {
+        ll == 2;
+      } else {
+        ll = 3;
+      }
+      that
+        .$http({
+          url: "/phone/paths",
+          method: "post",
+          data: {
+            token: that.$store.state.user_info.token,
+            type: 1,
+            language: ll
+          }
+        })
+        .then(function(res) {
+          if (res.data.code == 1) {
+            that.$router.push({
+              name: "home"
+            });
+          } else {
+            that.$vux.toast.show({
+              text: res.data.msg,
+              type: "text",
+              position: "middle",
+              time: 1200
+            });
+            that
+              .$http({
+                url: "/phone/img_code",
+                method: "post",
+                data: {}
+              })
+              .then(function(res) {
+                that.img_url = res.data;
+              });
+          }
+        });
     },
     failCode() {
       let that = this;
+      let ll = "";
+      if (that.$store.state.lang == "cn") {
+        ll = 1;
+      } else if (that.$store.state.lang == "ct") {
+        ll == 2;
+      } else {
+        ll = 3;
+      }
       that
         .$http({
           url: "/phone/img_code",
@@ -180,6 +248,17 @@ export default {
         .then(function(res) {
           that.img_url = res.data;
         });
+      that
+        .$http({
+          url: "/phone/paths",
+          method: "post",
+          data: {
+            token: that.$store.state.user_info.token,
+            type: 2,
+            language: ll
+          }
+        })
+        .then(function(res) {});
     },
     refresh() {
       let that = this;
@@ -383,6 +462,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.start {
+  position: fixed;
+  z-index: 9999999;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
 .v_dialog {
   position: fixed;
   left: 0;
@@ -419,6 +506,7 @@ export default {
   font-size: 0.38rem;
   position: absolute;
   width: 100%;
+  background: #12161c;
   color: white;
   .top {
     box-shadow: none;

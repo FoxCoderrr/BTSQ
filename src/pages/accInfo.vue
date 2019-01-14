@@ -25,7 +25,7 @@
             <span class="f_r iconfont icon-youjiantou"></span>
             <span class="f_r">{{name}}</span>
           </li>
-          <li>
+          <li @click="show = false">
             <span class="f_l">ID</span>
             <span class="f_r iconfont icon-youjiantou"></span>
             <span class="f_r">{{info.id}}</span>
@@ -93,9 +93,9 @@ export default {
     },
     click(key) {
       if (key == "menu1") {
-        getImage();
-      } else {
-        galleryImgs();
+        this.getImage();
+      } else if(key == "menu2") {
+        this.galleryImgs();
       }
     },
     pushImg1: function(e) {
@@ -124,7 +124,7 @@ export default {
         });
       } else {
         that.$vux.loading.show({
-          text: that.$t('load.uping')
+          text: that.$t("load.uping")
         });
         reader.onload = function() {
           let result = this.result;
@@ -151,15 +151,14 @@ export default {
                     url: "/user/change_user_info",
                     method: "post",
                     data: {
-                      token:that.$store.state.user_info.token,
-                      type:1,
-                      profile_icon:that.src,
-                      nickname:""
+                      token: that.$store.state.user_info.token,
+                      type: 1,
+                      profile_icon: that.src,
+                      nickname: ""
                     }
                   })
                   .then(function(res) {
                     if (res.data.code == 1) {
-                      
                     } else {
                       that.$vux.toast.show({
                         text: res.data.msg,
@@ -185,13 +184,14 @@ export default {
     },
     //调用手机摄像头并拍照
     getImage() {
+      let that = this;
       var cmr = plus.camera.getCamera();
       cmr.captureImage(
         function(p) {
           plus.io.resolveLocalFileSystemURL(
             p,
             function(entry) {
-              compressImage(entry.toLocalURL(), entry.name);
+              that.compressImage(entry.toLocalURL(), entry.name);
             },
             function(e) {
               plus.nativeUI.toast("读取拍照文件错误：" + e.message);
@@ -201,19 +201,50 @@ export default {
         function(e) {},
         {
           filter: "image"
+        },
+        {
+          filename: "_doc/camera/",
+          index: 1
         }
       );
     },
     //从相册选择照片
     galleryImgs() {
+      let that = this;
       plus.gallery.pick(
         function(e) {
           var name = e.substr(e.lastIndexOf("/") + 1);
-          compressImage(e, name);
+          that.compressImage(e, name);
         },
         function(e) {},
         {
           filter: "image"
+        },
+        {
+          filename: "_doc/camera/",
+          index: 1
+        }
+      );
+    },
+    //压缩图片
+    compressImage(url, filename, divid) {
+      var name = "_doc/upload/" + divid + "-" + filename; //_doc/upload/F_ZDDZZ-1467602809090.jpg
+      plus.zip.compressImage(
+        {
+          src: url, //src: (String 类型 )压缩转换原始图片的路径
+          dst: name, //压缩转换目标图片的路径
+          quality: 20, //quality: (Number 类型 )压缩图片的质量.取值范围为1-100
+          overwrite: true //overwrite: (Boolean 类型 )覆盖生成新文件
+        },
+        function(event) {
+          //uploadf(event.target,divid);
+          var path = name; //压缩转换目标图片的路径
+          //event.target获取压缩转换后的图片url路
+          //filename图片名称
+          alert(path);
+        },
+        function(error) {
+          plus.nativeUI.toast("压缩图片失败，请稍候再试");
         }
       );
     },

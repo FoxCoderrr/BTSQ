@@ -1,18 +1,20 @@
 <template>
   <div class="wrap" :class="{wrapp:!$store.state.bshow}">
     <div class="top">
-      <tab
-        class="tab"
-        :line-width="2"
-        bar-active-color="#f0b90b"
-        active-color="#f0b90b"
-        :scroll-threshold="5"
-        v-model.number="$store.state.n"
-      >
-        <tab-item selected @click.native="navTap(0)">{{$t('trade.title.t1')}}</tab-item>
-        <tab-item @click.native="navTap(1)">{{$t('trade.title.t2')}}</tab-item>
-        <tab-item @click.native="navTap(2)">{{$t('trade.title.t3')}}</tab-item>
-      </tab>
+      <keep-alive>
+        <tab
+          class="tab"
+          :line-width="2"
+          bar-active-color="#f0b90b"
+          active-color="#f0b90b"
+          :scroll-threshold="5"
+          v-model.number="type"
+        >
+          <tab-item @click.native="navTap(0)">{{$t('trade.title.t1')}}</tab-item>
+          <tab-item @click.native="navTap(1)">{{$t('trade.title.t2')}}</tab-item>
+          <tab-item @click.native="navTap(2)">{{$t('trade.title.t3')}}</tab-item>
+        </tab>
+      </keep-alive>
     </div>
     <router-view name="child" class="child"></router-view>
   </div>
@@ -24,6 +26,7 @@ import {Tab, TabItem } from "vux";
 export default {
   data() {
     return {
+      type:0,
     };
   },
   components: {
@@ -39,6 +42,13 @@ export default {
       });
       error;
     };
+    this.$nextTick(() => {
+      if (this.$store.state.n) {
+        this.type = Number(this.$store.state.n);
+      } else {
+        this.type = 0;
+      }
+    });
   },
   methods: {
     navTap(i) {

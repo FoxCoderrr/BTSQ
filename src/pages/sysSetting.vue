@@ -25,6 +25,12 @@
             <span v-if="wechat" class="f_r f_c">{{$t('bind')}}</span>
             <span v-if="!wechat" class="f_r">{{$t('unbind')}}</span>
           </li>
+          <li @click="toPaypal">
+            <span class="f_l">{{$t('sysset.list.l5')}}</span>
+            <span class="f_r iconfont icon-youjiantou"></span>
+            <span v-if="paypal" class="f_r f_c">{{$t('bind')}}</span>
+            <span v-if="!paypal" class="f_r">{{$t('unbind')}}</span>
+          </li>
           <li>
             <span class="f_l">{{$t('sysset.list.l4')}}</span>
             <span class="f_r lang">
@@ -48,7 +54,8 @@ export default {
       lang: "",
       alipay: "",
       wechat: "",
-      bank:"",
+      bank: "",
+      paypal:""
     };
   },
   components: {},
@@ -75,13 +82,17 @@ export default {
           that.alipay = res.data.data.alipay_account;
           that.wechat = res.data.data.wechat_img;
           that.bank = res.data.data.bank;
-          if(res.data.data.alipay_account){
-            sessionStorage.setItem("alipayname",res.data.data.alipay_name);
-            sessionStorage.setItem("alipayacc",res.data.data.alipay_account);
+          that.paypal = res.data.data.paypal;
+          if (res.data.data.alipay_account) {
+            sessionStorage.setItem("alipayname", res.data.data.alipay_name);
+            sessionStorage.setItem("alipayacc", res.data.data.alipay_account);
           }
-          if(res.data.data.wechat_img){
-            sessionStorage.setItem("wechatnick",res.data.data.wechat_nick);
-            sessionStorage.setItem("wechatimg",res.data.data.wechat_img);
+          if (res.data.data.wechat_img) {
+            sessionStorage.setItem("wechatnick", res.data.data.wechat_nick);
+            sessionStorage.setItem("wechatimg", res.data.data.wechat_img);
+          }
+          if(res.data.data.paypal){
+            sessionStorage.setItem("paypal", res.data.data.paypal);
           }
         } else {
           that.$vux.toast.show({
@@ -125,6 +136,20 @@ export default {
       }
       this.$router.push({
         name: "wechat1",
+        params: {
+          type: t
+        }
+      });
+    },
+    toPaypal() {
+      let t;
+      if (this.paypal) {
+        t = 1;
+      } else {
+        t = 0;
+      }
+      this.$router.push({
+        name: "paypal",
         params: {
           type: t
         }

@@ -29,7 +29,7 @@
       <div class="dialog">
         <div class="dia_title">{{$t('codedialog.c1')}}</div>
         <div class="dia_con">
-          <div class="code_title">{{email}}{{$t('codedialog.c3')}}</div>
+          <div class="code_title">{{email}} {{$t('codedialog.c2')}}</div>
           <div>
             <input type="text" class="code_input" :placeholder="$t('codedialog.c3')" v-model="code">
           </div>
@@ -81,10 +81,14 @@ export default {
               let str = "",
                 arr = [];
               let n = parseInt(v.bank_card.length / 4);
-              for (let i = 0; i < n; i++) {
+              let nn=n;
+              if(v.bank_card.length%4==0){
+                nn=n-1;
+              }
+              for (let i = 0; i < nn; i++) {
                 arr.push("****&nbsp;&nbsp;&nbsp;");
               }
-              arr.push(v.bank_card.substr(v.bank_card.length - n));
+              arr.push(v.bank_card.substr(nn*4));
               v.bank_card1 = arr.join("");
             }
             that.list = res.data.data.list;
@@ -221,7 +225,13 @@ export default {
               position: "middle",
               time: 1200
             });
-            that.list[i].default = 1;
+            for(let x in that.list){
+              if(x==i){
+                that.list[i].default = 1;
+              }else{
+                that.list[x].default = 0;
+              }
+            }
           } else {
             that.$vux.toast.show({
               text: res.data.msg,
