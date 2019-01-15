@@ -155,7 +155,7 @@ export default {
           if (res.data.code == 1) {
             that.t_info = res.data.data.market;
             that.b_list = res.data.data.buy_list;
-            that.s_list = res.data.data.sell_list;
+            // that.s_list = res.data.data.sell_list;
             that.l_list = res.data.data.latest_deal;
             if(that.b_list){
               that.b_total=0;
