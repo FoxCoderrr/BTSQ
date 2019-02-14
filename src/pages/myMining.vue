@@ -103,8 +103,8 @@ export default {
   height: 100%;
   color: white;
   box-sizing: border-box;
+  padding-top: 0.3rem;
   > div {
-    margin-top: 0.3rem;
     border-radius: 8px;
     box-sizing: border-box;
     padding: 0.6rem 0 0rem;
@@ -169,17 +169,18 @@ export default {
     color: #b9b9c1;
   }
   ul {
+    overflow: hidden;
     li {
       border-bottom: 1px solid #12161c;
       padding: 0.3rem 4% 0.3rem;
       overflow: hidden;
       font-size: 0.32rem;
+      box-sizing: border-box;
       img {
         width: 1rem;
         height: 1rem;
       }
       .f_l {
-        margin-right: 0.4rem;
         > img,
         > span {
           display: block;
@@ -193,6 +194,14 @@ export default {
         }
         > div:last-child {
           padding-bottom: 0;
+        }
+      }
+      >.f_l:first-child{
+        margin-right: 0.3rem;
+        >span:last-child{
+          max-width: 2rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }

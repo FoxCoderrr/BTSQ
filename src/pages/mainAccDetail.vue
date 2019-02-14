@@ -15,13 +15,13 @@
                 <span>{{info.price}}</span>
             </li>
             <li>
-                <span>USD{{$t('mainacc.list.t3')}}：</span>
+                <span>{{$t('mainacc.list.t6')}}(USD)：</span>
                 <span>{{info.total}}</span>
             </li>
-            <li>
+            <!-- <li>
                 <span>CNY{{$t('mainacc.list.t3')}}：</span>
                 <span>{{info.cny_total}}</span>
-            </li>
+            </li> -->
             <li>
                 <span>{{$t('mainacc.detail.time')}}：</span>
                 <span>{{info.create_time}}</span>
@@ -30,7 +30,6 @@
                 <span>类型：</span>
                 <span>已成交</span>
             </li> -->
-            
         </ul>
     </div>
   </div>

@@ -2,9 +2,24 @@ export default {
   language: {
     name: "English"
   },
+  new:{
+    a:"Upload proof",
+    b:"Pattern",
+    c:"Alipay",
+    d:"Wechat",
+    e:"Bank card",
+  },
+  nono:"Unconditional",
+  n1:"Number",
+  n2:"Enter the number",
+  n3:"Submit",
+  n4:"Copy address",
+  w1:"Income account",
+  w2:"Main account",
   book:{
     title:"White-paper",
   },
+  celing:"Canceling...",
   msg:{
     title:{
       t1:"Unread",
@@ -26,9 +41,9 @@ export default {
   code1: "Send",
   next: "Next",
   second: "seconds",
-  ch: "中文简体",
-  ch1: "中文繁体",
-  en: "English",
+  ch:"中文简体",
+  ch1:"中文繁體",
+  en:"English",
   codedialog:{
     c1:"Enter the code",
     c2:"received",
@@ -42,7 +57,7 @@ export default {
     pwd_again1:"The two new password is different",
     login_pwd_again:"The two login password is different",
     trade_pwd_again:"The two trade password is different",
-    full_tip: "Please complete form",
+    full_tip: "Please complete the form",
     code_input:"Please enter the code",
     email_error: "Email error",
     phone_error: "Phone number error",
@@ -215,7 +230,7 @@ export default {
       t1: "Mine",
       t2: "Status",
       t3: "Funds",
-      t4: "Net Power",
+      t4: "Left profit",
       t5: "Mine Power"
     },
     dialog: {
@@ -423,7 +438,8 @@ export default {
       t1: "Amount",
       t2: "Price",
       t3: "Total",
-      t5: "Operate"
+      t5: "Operate",
+      t6:"Total"
     },
     btn: {
       b1: "Detail"
@@ -452,9 +468,9 @@ export default {
     s2:"Rights description",
     list1:{
       t1:"Level",
-      t2:"Total investment",
+      t2:"Mining investment",
       t3:"Share amount",
-      t4:"Total investment in 10th generation",
+      t4:"Total investment of mine",
       t5:"Direct mine",
     },
     list2:{
@@ -473,12 +489,12 @@ export default {
     n4:"5.4 million",
     t0:"General User",
     w:"",
-    usd:"USD",
+    usd:"USD ",
     lt:"less than",
     gt:"more",
     gt_b:"more than",
     gt_a:"",
-    or:"or",
+    or:"or ",
     n:" ",
     play:"Trial play",
     all:"Global dividend every month",
@@ -657,7 +673,7 @@ export default {
       p2: "Enter wechat nickname"
     }
   },
-  paypel:{
+  paypal:{
     title:{
       t1:"Bind Paypal",
       t2:"Paypal Info",

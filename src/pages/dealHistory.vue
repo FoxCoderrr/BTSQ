@@ -28,9 +28,9 @@
               <tbody>
                 <tr v-for="(item,index) in list" :key="index">
                   <td>{{item.order}}</td>
-                  <td :class="[item.trade_type_text_color=='red'?'f_c_green':'f_c_red']">{{item.trade_type_text}}</td>
+                  <td :class="[item.trade_type_text_color=='green'?'f_c_green':'f_c_red']">{{item.trade_type_text}}</td>
                   <td>{{item.order_status_text}}</td>
-                  <td @click="toDetail(item.trade_id)">{{$t('trade.child3.btn.b1')}}</td>
+                  <td @click="toDetail(item)">{{$t('trade.child3.btn.b1')}}</td>
                 </tr>
               </tbody>
             </x-table>
@@ -86,7 +86,13 @@ export default {
       that.list = [];
       that.getlist(1);
     },
-    toDetail(id) {
+    toDetail(item) {
+      let id="";
+      if(item.trade_type_text_color=="green"){
+        id = item.trade_sell_id;
+      }else{
+        id = item.trade_buy_id;
+      }
       this.$router.push({
         name: "dealdetail",
         params:{

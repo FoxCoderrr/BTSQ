@@ -7,7 +7,7 @@
     <div class="main">
       <div class="top_info">
         <div>
-          <span class="f_l">{{$t('market.topinfo.t1')}}：{{t_info.price_new}} USD</span>
+          <span class="f_l">{{$t('market.topinfo.t1')}}：{{t_info.price_new}}</span>
           <span
             class="f_r"
             :class="[t_info.fall_type==2?'f_c_red':'f_c_green']"
@@ -47,19 +47,25 @@
         <div v-if="o_type==1" class="bs_info">
           <div class="line"></div>
           <div>
-            <div>{{$t('market.order.list1.t1')}}<span class="total">{{$t('total')}}{{b_total}}</span></div>
+            <div>
+              {{$t('market.order.list1.t1')}}(USD)
+              <span class="total">{{$t('total')}}{{b_total}}</span>
+            </div>
             <ul>
               <li v-for="(item,index) in b_list" :key="index">
-                <span class="f_l">{{item.price}}USD</span>
+                <span class="f_l">{{item.price}}</span>
                 <span class="f_r f_c_red">{{item.number}}</span>
               </li>
             </ul>
           </div>
           <div>
-            <div>{{$t('market.order.list1.t2')}}<span class="total">{{$t('total')}}{{s_total}}</span></div>
+            <div>
+              {{$t('market.order.list1.t2')}}(USD)
+              <span class="total">{{$t('total')}}{{s_total}}</span>
+            </div>
             <ul>
               <li v-for="(item,index) in s_list" :key="index">
-                <span class="f_l">{{item.price}}USD</span>
+                <span class="f_l">{{item.price}}</span>
                 <span class="f_r f_c_green">{{item.number}}</span>
               </li>
             </ul>
@@ -107,8 +113,8 @@ export default {
       b_list: [],
       s_list: [],
       l_list: [],
-      b_total:0,
-      s_total:0,
+      b_total: 0,
+      s_total: 0
     };
   },
   components: {
@@ -157,16 +163,26 @@ export default {
             that.b_list = res.data.data.buy_list;
             // that.s_list = res.data.data.sell_list;
             that.l_list = res.data.data.latest_deal;
-            if(that.b_list){
-              that.b_total=0;
-              for(let v of that.b_list){
-                that.b_total+=v.number;
+            if (that.b_list) {
+              that.b_total = 0;
+              for (let v of that.b_list) {
+                that.b_total += v.number;
+              }
+              if (that.b_total < 1000) {
+              }
+              if (that.b_total > 1000 && that.b_total < 10000) {
+                that.b_total =
+                  parseFloat(that.b_total / 1000).toFixed(2) + "k";
+              }
+              if (that.b_total > 1000000) {
+                that.b_total =
+                  parseFloat(that.b_total / 1000000).toFixed(2) + "m";
               }
             }
-            if(that.s_list){
-              that.s_total=0;
-              for(let v of that.s_list){
-                that.s_total+=Number(v.number);
+            if (that.s_list) {
+              that.s_total = 0;
+              for (let v of that.s_list) {
+                that.s_total += Number(v.number);
               }
             }
           } else {
@@ -211,27 +227,27 @@ export default {
             var time_line_data = that.splitData1(res.data);
             that.build_timeline(time_line_data);
           });
-          // var test_data=[
-          //   {time: "2019.01.04 10:03", open: 1, low: 10, high: 10, vol: 55, close: 10},
-          //   {time: "2019.01.04 10:05", open: 10, low: 0, high: 0, vol: 10, close: 20},
-          //   {time: "2019.01.04 10:06", open: 20, low: 0, high: 0, vol: 20, close: 20},
-          //   {time: "2019.01.04 10:07", open: 30, low: 0, high: 0, vol: 10, close: 20},
-          //   {time: "2019.01.04 10:08", open: 20, low: 0, high: 0, vol: 20, close: 20},
-          //   {time: "2019.01.04 10:09", open: 20, low: 0, high: 0, vol: 10, close: 20},
-          //   {time: "2019.01.04 10:10", open: 20, low: 0, high: 0, vol: 20, close: 20},
-          //   {time: "2019.01.04 10:11", open: 20, low: 0, high: 0, vol: 10, close: 30},
-          //   {time: "2019.01.04 10:12", open: 20, low: 0, high: 0, vol: 20, close: 30},
-          //   {time: "2019.01.04 10:13", open: 20, low: 0, high: 0, vol: 10, close: 30},
-          //   {time: "2019.01.04 10:14", open: 20, low: 0, high: 0, vol: 20, close: 30},
-          //   {time: "2019.01.04 10:15", open: 20, low: 0, high: 0, vol: 10, close: 30},
-          //   {time: "2019.01.04 10:16", open: 20, low: 0, high: 0, vol: 20, close: 30},
-          //   {time: "2019.01.04 10:17", open: 20, low: 0, high: 0, vol: 20, close: 30},
-          //   {time: "2019.01.04 10:18", open: 20, low: 0, high: 0, vol: 10, close: 30},
-          //   {time: "2019.01.04 10:19", open: 20, low: 0, high: 0, vol: 20, close: 30},
-          // ]
-          // that.$vux.loading.hide();
-          // var time_line_data = that.splitData1(test_data);
-          // that.build_timeline(time_line_data);
+        // var test_data=[
+        //   {time: "2019.01.04 10:03", open: 1, low: 10, high: 10, vol: 55, close: 10},
+        //   {time: "2019.01.04 10:05", open: 10, low: 0, high: 0, vol: 10, close: 20},
+        //   {time: "2019.01.04 10:06", open: 20, low: 0, high: 0, vol: 20, close: 20},
+        //   {time: "2019.01.04 10:07", open: 30, low: 0, high: 0, vol: 10, close: 20},
+        //   {time: "2019.01.04 10:08", open: 20, low: 0, high: 0, vol: 20, close: 20},
+        //   {time: "2019.01.04 10:09", open: 20, low: 0, high: 0, vol: 10, close: 20},
+        //   {time: "2019.01.04 10:10", open: 20, low: 0, high: 0, vol: 20, close: 20},
+        //   {time: "2019.01.04 10:11", open: 20, low: 0, high: 0, vol: 10, close: 30},
+        //   {time: "2019.01.04 10:12", open: 20, low: 0, high: 0, vol: 20, close: 30},
+        //   {time: "2019.01.04 10:13", open: 20, low: 0, high: 0, vol: 10, close: 30},
+        //   {time: "2019.01.04 10:14", open: 20, low: 0, high: 0, vol: 20, close: 30},
+        //   {time: "2019.01.04 10:15", open: 20, low: 0, high: 0, vol: 10, close: 30},
+        //   {time: "2019.01.04 10:16", open: 20, low: 0, high: 0, vol: 20, close: 30},
+        //   {time: "2019.01.04 10:17", open: 20, low: 0, high: 0, vol: 20, close: 30},
+        //   {time: "2019.01.04 10:18", open: 20, low: 0, high: 0, vol: 10, close: 30},
+        //   {time: "2019.01.04 10:19", open: 20, low: 0, high: 0, vol: 20, close: 30},
+        // ]
+        // that.$vux.loading.hide();
+        // var time_line_data = that.splitData1(test_data);
+        // that.build_timeline(time_line_data);
       }
     },
     deKline() {
@@ -444,41 +460,28 @@ export default {
                 " &nbsp;&nbsp;" +
                 that.$t("market.chart.tool.t6") +
                 params[0].data[1] +
-                "<br/>" +
-                params[1].seriesName +
-                "：" +
-                params[1].value +
-                "&nbsp;&nbsp;" +
-                params[3].seriesName +
-                "：" +
-                params[3].value
-              );
-            } else if (params[0].seriesIndex == 3) {
-              return (
-                that.$t("market.chart.tool.t1") +
-                params[0].name +
-                that.$t("market.chart.tool.t2") +
-                params[5].value +
-                "<br/>" +
-                params[0].seriesName +
-                " ：" +
-                params[0].value +
-                "&nbsp;&nbsp;&nbsp;&nbsp;" +
-                params[1].seriesName +
-                " ：" +
-                params[1].value +
-                "&nbsp;&nbsp;&nbsp;&nbsp;" +
-                params[2].seriesName +
-                " ：" +
-                params[2].value
+                "<br/>"
               );
             } else {
               return (
                 that.$t("market.chart.tool.t1") +
-                params[0].name +
-                "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                params[1].name +
+                "&nbsp;&nbsp;&nbsp;" +
                 that.$t("market.chart.tool.t2") +
-                params[5].value
+                params[1].data[5] +
+                "<br/>" +
+                that.$t("market.chart.tool.t3") +
+                params[1].data[4] +
+                " &nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t4") +
+                params[1].data[3] +
+                " &nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t5") +
+                params[1].data[2] +
+                " &nbsp;&nbsp;" +
+                that.$t("market.chart.tool.t6") +
+                params[1].data[1] +
+                "<br/>"
               );
             }
           },
@@ -495,20 +498,14 @@ export default {
           {
             left: "4%",
             right: "50",
-            height: "50%",
+            height: "58%",
             top: "10px"
           },
           {
             left: "4%",
             right: "50",
-            top: "62%",
-            height: "14%"
-          },
-          {
-            left: "4%",
-            right: "50",
-            top: "76%",
-            height: "20%"
+            top: "66%",
+            height: "26%"
           }
         ],
         xAxis: [
@@ -531,7 +528,7 @@ export default {
               }
             },
             axisLabel: {
-              show: true
+              show: false
             },
             axisTick: {
               show: true
@@ -551,7 +548,7 @@ export default {
             boundaryGap: true,
             data: data.times,
             axisLabel: {
-              show: false
+              show: true
             },
             splitLine: {
               show: false,
@@ -561,34 +558,18 @@ export default {
               }
             },
             axisLine: {
-              show: false,
+              show: true,
               lineStyle: {
-                color: "#61688A"
+                color: "rgba(255,255,255,.7)"
               }
             },
             axisPointer: {
               label: {
-                show: false
+                show: true
               }
             },
             axisTick: {
-              show: false
-            }
-          },
-          {
-            type: "category",
-            boundaryGap: true,
-            gridIndex: 2,
-            data: data.times,
-            axisLabel: {
-              show: false,
-              color: "#5d74af"
-            },
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
+              show: true
             }
           }
         ],
@@ -641,39 +622,12 @@ export default {
             axisLabel: {
               show: true
             }
-          },
-          {
-            gridIndex: 2,
-            splitNumber: 4,
-            position: "right",
-            axisLine: {
-              onZero: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: "rgba(255,255,255,.7)"
-              }
-            },
-            splitLine: {
-              show: false,
-              lineStyle: {
-                color: "rgba(255,0,0,.3)",
-                type: "dashed"
-              }
-            },
-            axisLabel: {
-              show: true
-            }
           }
         ],
         dataZoom: [
           {
             type: "inside",
-            xAxisIndex: [0, 1, 2],
+            xAxisIndex: [0, 1],
             startValue: data.times.length > 30 ? data.times.length - 30 : 0,
             endValue: data.times.length - 1
           }
@@ -741,10 +695,7 @@ export default {
                 color: function(params) {
                   var colorList;
                   if (params.dataIndex == 0) {
-                    if (
-                      data.datas[1][1] >
-                      data.datas[0][1]
-                    ) {
+                    if (data.datas[1][1] > data.datas[0][1]) {
                       colorList = "#01b782";
                     } else {
                       colorList = "#d40469";
@@ -763,70 +714,6 @@ export default {
                     return colorList;
                   }
                 }
-              }
-            }
-          },
-          {
-            name: "MACD",
-            type: "bar",
-            xAxisIndex: 2,
-            yAxisIndex: 2,
-            data: data.macds,
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: "rgba(255,0,0,.3)",
-                type: "dashed"
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: function(params) {
-                  var colorList;
-                  if (params.data >= 0) {
-                    colorList = "#d40469";
-                  } else {
-                    colorList = "#01b782";
-                  }
-                  return colorList;
-                }
-              }
-            }
-          },
-          {
-            name: "DIF",
-            type: "line",
-            symbol: "none",
-            hoverAnimation: false,
-            showSymbol: false,
-            showAllSymbol: false,
-            xAxisIndex: 2,
-            yAxisIndex: 2,
-            data: data.difs,
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: "rgba(255,0,0,.3)",
-                type: "dashed"
-              }
-            }
-          },
-          {
-            name: "DEA",
-            type: "line",
-            symbol: "none",
-
-            hoverAnimation: false,
-            showSymbol: false,
-            showAllSymbol: false,
-            xAxisIndex: 2,
-            yAxisIndex: 2,
-            data: data.deas,
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: "rgba(255,0,0,.3)",
-                type: "dashed"
               }
             }
           }
@@ -989,7 +876,7 @@ export default {
             splitArea: {
               show: false
             },
-             axisLine: {
+            axisLine: {
               show: true,
               lineStyle: {
                 color: "rgba(255,255,255,.7)"
@@ -1008,7 +895,7 @@ export default {
             splitNumber: 3,
             position: "right",
             boundaryGap: true,
-             axisLine: {
+            axisLine: {
               show: true,
               lineStyle: {
                 color: "rgba(255,255,255,.7)"
@@ -1085,11 +972,8 @@ export default {
               normal: {
                 color: function(params) {
                   var colorList;
-                  if(params.dataIndex==0){
-                    if (
-                      data.datas[1].close >
-                      data.datas[0].close
-                    ) {
+                  if (params.dataIndex == 0) {
+                    if (data.datas[1].close > data.datas[0].close) {
                       colorList = "#01b782";
                     } else {
                       colorList = "#d40469";
@@ -1180,10 +1064,10 @@ export default {
         }
       }
       .bs_info {
-        padding: 0 4% 0;
+        padding: 0 2% 0;
         display: flex;
         position: relative;
-        .total{
+        .total {
           float: right;
         }
         > .line {

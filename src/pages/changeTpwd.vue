@@ -96,7 +96,7 @@ export default {
             url: "/user/user_send_email",
             method: "post",
             data: {
-              token: that.$store.state.user_info.token.token
+              token: that.$store.state.user_info.token
             }
           })
           .then(function(res) {
@@ -107,7 +107,7 @@ export default {
                 position: "middle",
                 time: 1500
               });
-              that.u_code = res.data.data;
+              that.u_code = res.data.data.code;
             } else {
               that.$vux.toast.show({
                 text: res.data.msg,
@@ -132,8 +132,8 @@ export default {
             data: {
               token: that.$store.state.user_info.token,
               old_password:that.pwd,
-              new_password:that.pwd,
-              re_new_password:that.pwd,
+              new_password:that.pwd1,
+              re_new_password:that.pwd2,
               email_code:that.u_code
             }
           })
@@ -145,10 +145,14 @@ export default {
                 position: "middle",
                 time: 1500
               });
+              that.pwd="";
+              that.pwd1="";
+              that.pwd2="";
+              that.u_code="";
             } else {
               that.$vux.toast.show({
                 text: res.data.msg,
-                type: "text",
+                type: "cancel",
                 position: "middle",
                 time: 1200
               });

@@ -43,17 +43,23 @@
         </tab>
         <div v-if="type==0" class="form_div">
           <div class="form">
-            <div>
+            <!-- <div>
               <span class="f_l">{{$t('trade.child1.buy.l1')}}：</span>
               <div class="f_r">
                 <span class="span">{{best_buy_price}}</span>
               </div>
-            </div>
+            </div>-->
             <div>
               <span class="f_l">{{$t('trade.child1.buy.l2')}}：</span>
-              <div class="f_r">
-                <input type="text" v-model="b_price" @input="num($event,1)" :placeholder="$t('trade.child1.buy.i1')">
+              <div class="f_r po_re">
+                <input
+                  type="text"
+                  v-model="b_price"
+                  @input="num($event,1)"
+                  :placeholder="$t('trade.child1.buy.i1')"
+                >
                 <span class="spans">{{$t('trade.child1.buy.t1')}}：{{buyData.cny}} ￥</span>
+                <span v-if="!b_price" class="po_ab">{{$t('trade.child1.buy.l1')}}:{{best_buy_price}}</span>
               </div>
             </div>
             <div>
@@ -65,7 +71,12 @@
             <div>
               <span class="f_l">{{$t('trade.child1.buy.l4')}}：</span>
               <div class="f_r">
-                <input type="text" v-model="b_num" @input="num($event,2)" :placeholder="$t('trade.child1.buy.i2')">
+                <input
+                  type="text"
+                  v-model="b_num"
+                  @input="num($event,2)"
+                  :placeholder="$t('trade.child1.buy.i2')"
+                >
               </div>
             </div>
             <div>
@@ -90,26 +101,40 @@
         </div>
         <div v-if="type==1" class="form_div">
           <div class="form">
-            <div>
+            <!-- <div>
               <span class="f_l">{{$t('trade.child1.sell.l1')}}：</span>
               <div class="f_r">
                 <span class="span">{{best_sell_price}}</span>
               </div>
-            </div>
+            </div>-->
             <div>
               <span class="f_l">{{$t('trade.child1.sell.l2')}}：</span>
-              <div class="f_r">
-                <input type="text" v-model="s_price" @input="num($event,3)" :placeholder="$t('trade.child1.sell.i1')">
+              <div class="f_r po_re">
+                <input
+                  type="text"
+                  v-model="s_price"
+                  @input="num($event,3)"
+                  :placeholder="$t('trade.child1.sell.i1')"
+                >
                 <span class="spans">{{$t('trade.child1.sell.t1')}}：{{sellData.cny}} ￥</span>
+                <span v-if="!s_price" class="po_ab">{{$t('trade.child1.sell.l1')}}:{{best_sell_price}}</span>
               </div>
             </div>
             <div>
               <span class="f_l">{{$t('trade.child1.sell.l3')}}：</span>
               <div class="f_r">
-                <input type="text" v-model="s_num" @input="num($event,4)" :placeholder="$t('trade.child1.sell.i2')">
+                <input
+                  type="text"
+                  v-model="s_num"
+                  @input="num($event,4)"
+                  :placeholder="$t('trade.child1.sell.i2')"
+                >
                 <span class="spans">
                   {{$t('trade.child1.sell.max')}}：{{max_sell_num}}
-                  <span class="iconfont icon-iconfontquestion" @click="tip"></span>
+                  <span
+                    class="iconfont icon-iconfontquestion"
+                    @click="tip"
+                  ></span>
                 </span>
               </div>
             </div>
@@ -175,14 +200,14 @@ export default {
       s_price: "",
       s_num: "",
       s_pwd: "",
-      best_buy_price: "-- USD",
-      best_sell_price: "-- USD",
+      best_buy_price: "--",
+      best_sell_price: "--",
       ratio: "",
       ratio1: "",
       u_usd: "",
       u_coin: "",
-      max_sell_num:"",
-      tips:"",
+      max_sell_num: "",
+      tips: ""
     };
   },
   components: {
@@ -226,7 +251,7 @@ export default {
         cny: cny,
         sum1: sum1,
         sum2: sum2,
-        max:max,
+        max: max
         // fee:fee,
       };
     },
@@ -248,13 +273,13 @@ export default {
       } else {
         sum1 = (parseFloat(that.s_price) * parseFloat(that.s_num)).toFixed(2);
         sum2 = (sum1 * parseFloat(that.ratio)).toFixed(2);
-        fee = (parseFloat(sum1)*parseFloat(that.ratio1)).toFixed(2);
+        fee = (parseFloat(sum1) * parseFloat(that.ratio1)).toFixed(2);
       }
       return {
         cny: cny,
         sum1: sum1,
         sum2: sum2,
-        fee:fee,
+        fee: fee
       };
     }
   },
@@ -275,7 +300,7 @@ export default {
       }
     });
     that.getInfo();
-    window.t = setInterval(that.getInfo,3000);
+    window.t = setInterval(that.getInfo, 3000);
     // 个人账户资金
     that
       .$http({
@@ -323,13 +348,13 @@ export default {
           });
         }
       });
-      // 最大可卖提示
+    // 最大可卖提示
     that
       .$http({
         url: "/Transaction/max_sell_tips",
         method: "post",
         data: {
-          token: that.$store.state.user_info.token,
+          token: that.$store.state.user_info.token
         }
       })
       .then(function(res) {
@@ -347,8 +372,11 @@ export default {
   },
   methods: {
     navTap(i) {
+      let that = this;
       this.type = i;
+      clearInterval(window.t);
       this.getInfo();
+      window.t = setInterval(that.getInfo, 3000);
     },
     toDetail() {
       this.$router.push({
@@ -356,10 +384,11 @@ export default {
       });
     },
     num(e, i) {
+      clearInterval(window.t);
       $(e.target).val(
         $(e.target)
           .val()
-          .match(/\d+\.?\d{0,6}/)
+          .match(/\d+\.?\d{0,3}/)
       );
       switch (i) {
         case 1:
@@ -376,9 +405,9 @@ export default {
           break;
       }
     },
-    percent(x){
+    percent(x) {
       let that = this;
-      that.s_num = (parseFloat(that.max_sell_num)/parseFloat(x)).toFixed(2);
+      that.s_num = (parseFloat(that.max_sell_num) / parseFloat(x)).toFixed(2);
     },
     tip() {
       this.dialog = true;
@@ -406,8 +435,10 @@ export default {
             that.coin_info = res.data.data;
             if (that.type == 0) {
               that.best_buy_price = res.data.data.best_buy_num;
+              // that.b_price = res.data.data.best_buy_num;
             } else {
               that.best_sell_price = res.data.data.best_sell_num;
+              // that.s_price = res.data.data.best_sell_num;
             }
           } else {
             that.$vux.toast.show({
@@ -419,104 +450,104 @@ export default {
           }
         });
     },
-    buySub(){
+    buySub() {
       let that = this;
-      if(that.b_price&&that.b_num&&that.b_pwd){
+      if (that.b_price && that.b_num && that.b_pwd) {
         that.$vux.loading.show({
           text: ""
         });
         that
-        .$http({
-          url: "/Transaction/do_trade",
-          method: "post",
-          data: {
-            token: that.$store.state.user_info.token,
-            type: 2,
-            cur_id: that.$store.state.active_market.id,
-            price: that.b_price,
-            number: that.b_num,
-            pwd: that.b_pwd,
-          }
-        })
-        .then(function(res) {
-          that.$vux.loading.hide();
-          if (res.data.code == 1) {
-            that.$vux.toast.show({
-              text: res.data.msg,
-              type: "success",
-              position: "middle",
-              time: 1200
-            });
-            that.b_price = "";
-            that.b_num = "";
-            that.b_pwd = "";
-          } else {
-            that.$vux.toast.show({
-              text: res.data.msg,
-              type: "text",
-              position: "middle",
-              time: 1200
-            });
-          }
-        });
-      }else{
+          .$http({
+            url: "/Transaction/do_trade",
+            method: "post",
+            data: {
+              token: that.$store.state.user_info.token,
+              type: 2,
+              cur_id: that.$store.state.active_market.id,
+              price: that.b_price,
+              number: that.b_num,
+              pwd: that.b_pwd
+            }
+          })
+          .then(function(res) {
+            that.$vux.loading.hide();
+            if (res.data.code == 1) {
+              that.$vux.toast.show({
+                text: res.data.msg,
+                type: "success",
+                position: "middle",
+                time: 1200
+              });
+              that.b_price = "";
+              that.b_num = "";
+              that.b_pwd = "";
+            } else {
+              that.$vux.toast.show({
+                text: res.data.msg,
+                type: "text",
+                position: "middle",
+                time: 1200
+              });
+            }
+          });
+      } else {
         that.$vux.toast.show({
-          text: that.$t('tip.full_tip'),
+          text: that.$t("tip.full_tip"),
           type: "text",
           position: "middle",
           time: 1200
         });
       }
     },
-    sellSub(){
+    sellSub() {
       let that = this;
-      if(that.s_price&&that.s_num&&that.s_pwd){
+      if (that.s_price && that.s_num && that.s_pwd) {
         that.$vux.loading.show({
           text: ""
         });
         that
-        .$http({
-          url: "/Transaction/do_trade",
-          method: "post",
-          data: {
-            token: that.$store.state.user_info.token,
-            type: 1,
-            cur_id: that.$store.state.active_market.id,
-            price: that.s_price,
-            number: that.s_num,
-            pwd: that.s_pwd,
-          }
-        })
-        .then(function(res) {
-          that.$vux.loading.hide();
-          if (res.data.code == 1) {
-            that.$vux.toast.show({
-              text: res.data.msg,
-              type: "success",
-              position: "middle",
-              time: 1200
-            });
-            that.s_price = "";
-            that.s_num = "";
-            that.s_pwd = "";
-          } else {
-            that.$vux.toast.show({
-              text: res.data.msg,
-              type: "text",
-              position: "middle",
-              time: 1200
-            });
-          }
-        });
-      }else{
+          .$http({
+            url: "/Transaction/do_trade",
+            method: "post",
+            data: {
+              token: that.$store.state.user_info.token,
+              type: 1,
+              cur_id: that.$store.state.active_market.id,
+              price: that.s_price,
+              number: that.s_num,
+              pwd: that.s_pwd
+            }
+          })
+          .then(function(res) {
+            that.$vux.loading.hide();
+            if (res.data.code == 1) {
+              that.$vux.toast.show({
+                text: res.data.msg,
+                type: "success",
+                position: "middle",
+                time: 1200
+              });
+              that.s_price = "";
+              that.s_num = "";
+              that.s_pwd = "";
+            } else {
+              that.$vux.toast.show({
+                text: res.data.msg,
+                type: "text",
+                position: "middle",
+                time: 1200
+              });
+            }
+          });
+      } else {
         that.$vux.toast.show({
-          text: that.$t('tip.full_tip'),
+          text: that.$t("tip.full_tip"),
           type: "text",
           position: "middle",
           time: 1200
         });
       }
-    },
+    }
   }
 };
 </script>
@@ -554,6 +585,7 @@ export default {
         .form {
           padding: 0.4rem 10% 0.4rem;
           color: #bfbfc8;
+
           .choices {
             display: flex;
             .btn {
@@ -606,6 +638,21 @@ export default {
                   transform: translateY(1px);
                   margin-left: 0.1rem;
                 }
+              }
+            }
+            .po_re {
+              position: relative;
+              input {
+                padding: 0 2.2rem 0 0.2rem;
+              }
+              .po_ab {
+                position: absolute;
+                right: 0;
+                top: 0;
+                color: #878983;
+                line-height: 0.9rem;
+                padding-right: 0.1rem;
+                font-size: 0.32rem;
               }
             }
           }

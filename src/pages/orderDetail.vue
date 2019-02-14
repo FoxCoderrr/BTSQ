@@ -71,12 +71,14 @@
                     <button
                       v-if="type==2&&item.operation_type==1"
                       class="btn"
-                      @click="toPay(item.seller_id,item.order_id)"
+                      :class="{btn_:item.t_type}"
+                      @click="toPay(item.seller_id,item.order_id,item.t_type)"
                     >{{$t('trade.child1.pgs.b1')}}</button>
                     <button
                       v-if="type==3&&item.operation_type==2"
                       class="btn"
-                      @click="confirmReceive(item.order_id)"
+                      :class="{btn_:item.t_type}"
+                      @click="confirmReceive(item.order_id,item.t_type)"
                     >{{$t('trade.child1.pgs.b2')}}</button>
                     <span v-if="item.operation_type==3">{{$t('trade.child1.pgs.b3')}}</span>
                     <span v-if="type==3&&item.operation_type==1">{{$t('trade.child1.pgs.b4')}}</span>
@@ -172,7 +174,10 @@ export default {
             m = "00";
             s = "00";
             that.list[i].left_time = h + ":" + m + ":" + s;
-            // that.list.splice(i,1);
+            if (that.list[i].operation_type != 3) {
+              that.list[i].t_type = 1;
+              // that.list.splice(i, 1);
+            }
           }
         }
       }, 1000);
@@ -225,7 +230,10 @@ export default {
         }
       });
     },
-    toPay(id, id1) {
+    toPay(id, id1,bool) {
+      if(bool){
+        return false;
+      }
       this.$router.push({
         name: "topay",
         params: {
@@ -234,7 +242,10 @@ export default {
         }
       });
     },
-    confirmReceive(id) {
+    confirmReceive(id,bool) {
+      if(bool){
+        return false;
+      }
       let that = this;
       that.$vux.confirm.show({
         title: "放币",
@@ -266,10 +277,10 @@ export default {
                   position: "middle",
                   time: 1200
                 });
-                for(let v of that.list){
-                  if(v.order_id == id){
-                    v.operation_type=3;
-                    let tt = (new Date().getTime())/1000;
+                for (let v of that.list) {
+                  if (v.order_id == id) {
+                    v.operation_type = 3;
+                    let tt = new Date().getTime() / 1000;
                     v.left_times = tt;
                     break;
                   }
@@ -431,6 +442,9 @@ export default {
           padding: 0 0.3rem 0;
           background: #f0b90b;
           border-radius: 20px;
+        }
+        .btn_{
+          background: #ccc;
         }
       }
       td:last-child {

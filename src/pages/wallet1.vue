@@ -5,12 +5,22 @@
     </div>
     <div class="total_assets">
       <span>{{$t('wallet.wlt.total')}}（USD）</span>
-      <span>{{data.usd}}</span>
+      <span>{{data.usdt}}</span>
       <span>≈{{data.cny}}￥</span>
     </div>
-    <div class="div_title">{{$t('wallet.wlt.as')}}</div>
+    <!-- <div class="div_title">{{$t('wallet.wlt.as')}}</div> -->
     <div class="as_div">
-      <div class="div">
+      <div class="wat">
+        <div @click="toDetail({},1)">
+          <img src="../assets/wat1.png" alt>
+          <div>{{$t('w2')}}</div>
+        </div>
+        <div @click="toDetail({},0)">
+          <img src="../assets/wat2.png" alt>
+          <div>{{$t('w1')}}</div>
+        </div>
+      </div>
+      <!-- <div class="div">
         <div v-for="(item,index) in wallet" :key="index" @click="toDetail(item)">
           <div class="f_l">
             <img :src="item.icon" alt>
@@ -24,7 +34,7 @@
             <span>{{item.usdt}}USD</span>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -33,7 +43,7 @@ import $ from "jquery";
 export default {
   data() {
     return {
-      data: "",
+      data: {},
       wallet: []
     };
   },
@@ -47,6 +57,9 @@ export default {
       });
       error;
     };
+  },
+  activated() {
+    let that = this;
     that
       .$http({
         url: "/user/walletPage",
@@ -69,12 +82,14 @@ export default {
         }
       });
   },
-
   methods: {
-    toDetail(o) {
+    toDetail(o, i) {
       this.$store.state.active_wallet = o;
       this.$router.push({
-        name: "coindetail"
+        name: "coindetail",
+        params: {
+          type: i
+        }
       });
     }
   }
@@ -116,9 +131,10 @@ export default {
     font-size: 0.48rem;
   }
   .as_div {
+    margin-top: 0.2rem;
+    background: #1a212a;
+    padding: 0.4rem 3% 0.4rem;
     > .div {
-      background: #1a212a;
-      padding: 0 3% 0;
       > div {
         overflow: hidden;
         padding: 0.4rem 0 0.4rem;
@@ -140,6 +156,18 @@ export default {
       }
       > div:last-child {
         border: 0;
+      }
+    }
+    .wat {
+      display: flex;
+      > div {
+        flex: 1;
+        text-align: center;
+        font-size: 0.38rem;
+        color: rgba(255, 255, 255, .8);
+        img {
+          width: .8rem;
+        }
       }
     }
   }

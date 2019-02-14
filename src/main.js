@@ -42,7 +42,7 @@ import cn from "./base/lang/cn"
 import ct from "./base/lang/ct"
 import en from "./base/lang/en"
 const i18n = new VueI18n({
-  locale: "cn",
+  locale: store.state.lang,
   messages: {
     'cn': cn,
     'ct': ct,
@@ -53,6 +53,7 @@ Vue.$i18n = i18n;
 Vue.prototype.setLang = function (l) {
     this.$i18n.locale = l;
     store.state.lang=l;
+    localStorage.setItem("lang",l);
 };
 // axios
 import axios from 'axios'
@@ -81,7 +82,7 @@ instance.interceptors.response.use(function (response) {
   // 对响应错误做点什么
   Vue.$vux.loading.hide();
   Vue.$vux.toast.show({
-    text: "请求失败",
+    text: "该账号在别处登录，请重新登录！",
     type: "cancel",
     position: "middle",
     time: 1200

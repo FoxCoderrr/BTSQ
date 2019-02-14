@@ -44,9 +44,6 @@
             <span>{{info.block}}</span>
           </li>
         </ul>
-        <div>
-          <img :src="info.img" alt="">
-        </div>
       </div>
     </div>
   </div>
@@ -160,19 +157,6 @@ export default {
     }
     .order_info{
       overflow: hidden;
-      ul{
-        float: left;
-        width: calc(100% - 2.2rem);
-      }
-      div{
-        padding: 0.4rem 0 0.4rem;
-        float: right;
-        img{
-          width: 2rem;
-          height: 2rem;
-          margin-top: 0.3rem;
-        }
-      }
     }
   }
 }

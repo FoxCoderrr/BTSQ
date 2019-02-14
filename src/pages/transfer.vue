@@ -39,7 +39,8 @@
           </div>
           <div class="f_r fee_fr">
             <inline-loading v-if="calc"></inline-loading>
-            <span v-if="!calc">{{fee}}</span> {{$store.state.active_wallet.name}}
+            <span v-if="!calc">{{fee}}</span>
+            {{$store.state.active_wallet.name}}
           </div>
         </div>
         <div class="d_input">
@@ -61,7 +62,12 @@
         <div class="dia_con">
           <div class="code_title">{{info.phone}}{{$t('codedialog.c2')}}</div>
           <div>
-            <input type="text" class="code_input" v-model="phone_code" :placeholder="$t('codedialog.c3')">
+            <input
+              type="text"
+              class="code_input"
+              v-model="phone_code"
+              :placeholder="$t('codedialog.c3')"
+            >
           </div>
           <div>
             <button class="btn f_c code_btn" @click="phoneSub">{{$t('codedialog.c4')}}</button>
@@ -75,7 +81,12 @@
         <div class="dia_con">
           <div class="code_title">{{info.email}} {{$t('codedialog.c2')}}</div>
           <div>
-            <input type="text" class="code_input" v-model="email_code" :placeholder="$t('codedialog.c3')">
+            <input
+              type="text"
+              class="code_input"
+              v-model="email_code"
+              :placeholder="$t('codedialog.c3')"
+            >
           </div>
           <div>
             <button class="btn f_c code_btn" @click="emailSub">{{$t('codedialog.c4')}}</button>
@@ -133,7 +144,7 @@ export default {
         method: "post",
         data: {
           token: that.$store.state.user_info.token,
-          id: that.$store.state.active_wallet.id
+          id: 1
         }
       })
       .then(function(res) {
@@ -159,12 +170,12 @@ export default {
       let that = this;
       if (!parseFloat(that.t_num) || that.t_num.split(".").length > 2) {
         that.$vux.toast.show({
-          text: that.$t('tip.num_error'),
+          text: that.$t("tip.num_error"),
           type: "text",
           position: "middle",
           time: 1000
         });
-        that.fee="0.00";
+        that.fee = "0.00";
         return false;
       }
       that.calc = true;
@@ -210,7 +221,7 @@ export default {
           });
       } else {
         that.$vux.toast.show({
-          text: that.$t('tip.full_tip'),
+          text: that.$t("tip.full_tip"),
           type: "cancel",
           position: "middle",
           time: 1200
@@ -237,7 +248,35 @@ export default {
           if (res.data.code == 1) {
             that.show = false;
             if (that.ifEmail) {
-              that.show1 = true;
+              that
+                .$http({
+                  url: "/wallet/transferEmail",
+                  method: "post",
+                  data: {
+                    token: that.$store.state.user_info.token
+                  }
+                })
+                .then(function(res) {
+                  that.$vux.loading.hide();
+                  if (res.data.code == 1) {
+                    that.show = false;
+                    that.$vux.toast.show({
+                      text: res.data.msg,
+                      type: "success",
+                      position: "middle",
+                      time: 1200
+                    });
+                    that.email_code = res.data.data;
+                    that.show1 = true;
+                  } else {
+                    that.$vux.toast.show({
+                      text: res.data.msg,
+                      type: "text",
+                      position: "middle",
+                      time: 1200
+                    });
+                  }
+                });
             } else {
               that.transfer();
             }
@@ -269,8 +308,8 @@ export default {
           that.email_code = "";
           that.$vux.loading.hide();
           if (res.data.code == 1) {
-            that.email_code = res.data.data;
-            that.show = false;
+            that.email_code = "";
+            that.show1 = false;
             that.transfer();
           } else {
             that.$vux.toast.show({
@@ -296,7 +335,7 @@ export default {
             to_address: that.w_ads,
             number: that.t_num,
             remake: that.t_other,
-            id: that.$store.state.active_wallet.id
+            id: 1
           }
         })
         .then(function(res) {
@@ -319,7 +358,7 @@ export default {
           } else {
             that.$vux.toast.show({
               text: res.data.msg,
-              type: "text",
+              type: "cancel",
               position: "middle",
               time: 1200
             });

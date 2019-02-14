@@ -9,12 +9,12 @@
         active-color="#f0b90b"
         :scroll-threshold="5"
       >
-        <tab-item selected @click.native="show=true">{{$t('msg.title.t1')}}</tab-item>
-        <tab-item @click.native="show=false">{{$t('msg.title.t2')}}</tab-item>
+        <tab-item selected @click.native="getList(1)">{{$t('msg.title.t1')}}</tab-item>
+        <tab-item @click.native="getList(2)">{{$t('msg.title.t2')}}</tab-item>
       </tab>
     </div>
     <ul v-if="show">
-      <li v-for="(item,index) in list" :key="index" @click="toDetail(item.id,0)">
+      <li v-for="(item,index) in list" :key="index" @click="toDetail(item.id,1)">
         <span class="f_l">
           <span>
             {{item.title}}
@@ -25,7 +25,7 @@
       </li>
     </ul>
     <ul v-if="!show">
-      <li v-for="(item,index) in list" :key="index" @click="toDetail(item.id,1)">
+      <li v-for="(item,index) in list1" :key="index" @click="toDetail(item.id,2)">
         <span class="f_l">{{item.title}}</span>
         <img class="f_r r_img" src="../assets/right1.png" alt>
       </li>
@@ -41,7 +41,8 @@ export default {
     return {
       show: true,
       list: [],
-      type: 0
+      list1: [],
+      type: 1
     };
   },
   components: {
@@ -59,20 +60,46 @@ export default {
   },
   activated() {
     let that = this;
-    // that.$nextTick(function() {
-    //   that.type = 0;
-    // });
-    that
+    that.$nextTick(function() {
+      if(that.$route.params.type==1){
+        that.type = 1;
+        that.getList(1);
+      }else{
+        that.type = 2;
+        that.getList(2);
+      }
+    });
+  },
+  methods: {
+    back() {
+      this.$router.push({
+        name: "mine"
+      });
+    },
+    getList(i){
+      let that = this;
+      that.type = i;
+      if(i==1){
+        that.show = true;
+      }else{
+        that.show = false;
+      }
+      that
       .$http({
-        url: "/news/NewsListPage",
+        url: "/user/message_list",
         method: "post",
         data: {
-          token: that.$store.state.user_info.token
+          token: that.$store.state.user_info.token,
+          visit: that.type
         }
       })
       .then(function(res) {
         if (res.data.code == 1) {
-          that.list = res.data.data.list;
+          if(that.type==1){
+            that.list = res.data.data;
+          }else{
+            that.list1 = res.data.data;
+          }
         } else {
           that.$vux.toast.show({
             text: res.data.msg,
@@ -82,35 +109,14 @@ export default {
           });
         }
       });
-  },
-  methods: {
-    back() {
-      this.$router.push({
-        name: "mine"
-      });
-    },
-    navTap(i) {
-      if (i == 0) {
-        this.$router.push({
-          name: "message"
-        });
-      } else if (i == 1) {
-        this.$router.push({
-          name: "mymessage"
-        });
-      }
     },
     toDetail(id,type){
       let that = this;
-      if(type==0){
-
-      }else{
-
-      }
       that.$router.push({
         name:"msgdetail",
         params:{
-          i:id
+          i:id,
+          source:type
         }
       })
     }

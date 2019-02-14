@@ -133,7 +133,7 @@ export default new Router({
       }
     },
     {
-      path: '/coindetail',
+      path: '/coindetail/type=:type',
       name: 'coindetail',
       components: {
         main: CoinDetail,
@@ -398,7 +398,7 @@ export default new Router({
       }
     },
     {
-      path: '/msg',
+      path: '/msg/type=:type',
       name: 'msg',
       components: {
         main: Msg,
@@ -409,7 +409,7 @@ export default new Router({
       }
     },
     {
-      path: '/msgdetail',
+      path: '/msgdetail/i=:i&source=:source',
       name: 'msgdetail',
       components: {
         main: MsgDetail,
@@ -426,7 +426,7 @@ export default new Router({
         main: Book,
       },
       meta: {
-        index: 4,
+        index: 5,
         keepAlive:true
       }
     },
@@ -437,7 +437,7 @@ export default new Router({
         main: BookDetail,
       },
       meta: {
-        index: 5,
+        index: 6,
         keepAlive:true
       }
     },

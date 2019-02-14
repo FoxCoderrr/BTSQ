@@ -23,18 +23,18 @@
                 <span>{{$t('vip.list1.t2')}}：</span>
                 <span>{{$t('vip.lt')}}100{{$t('vip.usd')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list1.t3')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list1.t4')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list1.t5')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP1" name="2">
@@ -43,18 +43,18 @@
                 <span>{{$t('vip.list1.t2')}}：</span>
                 <span>100-299{{$t('vip.usd')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list1.t3')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list1.t4')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list1.t5')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP2" name="3">
@@ -63,18 +63,18 @@
                 <span>{{$t('vip.list1.t2')}}：</span>
                 <span>300{{$t('vip.usd')}}{{$t('vip.or')}}{{$t('vip.gt')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list1.t3')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list1.t4')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list1.t5')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP3" name="4">
@@ -91,10 +91,10 @@
                 <span>{{$t('vip.list1.t4')}}：</span>
                 <span>{{$t('vip.gt_b')}}{{$t('vip.n1')}}{{$t('vip.gt_a')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list1.t5')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP4" name="5">
@@ -167,14 +167,14 @@
                 <span>{{$t('vip.list2.t2')}}：</span>
                 <span>{{$t('vip.play')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list2.t3')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t4')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
               <li>
                 <span>{{$t('vip.list2.t5')}}：</span>
                 <span>2</span>
@@ -183,14 +183,14 @@
                 <span>{{$t('vip.list2.t6')}}：</span>
                 <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}100{{$t('vip.usd')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list2.t7')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t8')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP1" name="2">
@@ -199,14 +199,14 @@
                 <span>{{$t('vip.list2.t2')}}：</span>
                 <span>&#8730;</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list2.t3')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t4')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
               <li>
                 <span>{{$t('vip.list2.t5')}}：</span>
                 <span>3</span>
@@ -215,14 +215,14 @@
                 <span>{{$t('vip.list2.t6')}}：</span>
                 <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}200{{$t('vip.usd')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list2.t7')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t8')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP2" name="3">
@@ -235,26 +235,26 @@
                 <span>{{$t('vip.list2.t3')}}：</span>
                 <span>&#8730;</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list2.t4')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
               <li>
                 <span>{{$t('vip.list2.t5')}}：</span>
                 <span>4</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t6')}}：</span>
-                <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}600{{$t('vip.usd')}}</span>
+                <span>{{$t('vip.twice')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}600{{$t('vip.usd')}}</span>
               </li>
-              <li>
+              <!-- <li>
                 <span>{{$t('vip.list2.t7')}}：</span>
-                <span>*</span>
+                <span>{{$t('nono')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t8')}}：</span>
-                <span>*</span>
-              </li>
+                <span>{{$t('nono')}}</span>
+              </li> -->
             </ul>
           </van-collapse-item>
           <van-collapse-item title="VIP3" name="4">
@@ -277,7 +277,7 @@
               </li>
               <li>
                 <span>{{$t('vip.list2.t6')}}：</span>
-                <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}1000{{$t('vip.usd')}}</span>
+                <span>{{$t('vip.twice')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}1000{{$t('vip.usd')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t7')}}：</span>
@@ -309,7 +309,7 @@
               </li>
               <li>
                 <span>{{$t('vip.list2.t6')}}：</span>
-                <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}3000{{$t('vip.usd')}}</span>
+                <span>{{$t('vip.twice')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}3000{{$t('vip.usd')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t7')}}：</span>
@@ -341,7 +341,7 @@
               </li>
               <li>
                 <span>{{$t('vip.list2.t6')}}：</span>
-                <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}10000{{$t('vip.usd')}}</span>
+                <span>{{$t('vip.twice')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}10000{{$t('vip.usd')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t7')}}：</span>
@@ -365,7 +365,7 @@
               </li>
               <li>
                 <span>{{$t('vip.list2.t4')}}：</span>
-                <span>12%+（{{$t('vip.all')}}）</span>
+                <span>12%+{{$t('vip.all')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t5')}}：</span>
@@ -373,7 +373,7 @@
               </li>
               <li>
                 <span>{{$t('vip.list2.t6')}}：</span>
-                <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}30000{{$t('vip.usd')}}</span>
+                <span>{{$t('vip.twice')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}30000{{$t('vip.usd')}}</span>
               </li>
               <li>
                 <span>{{$t('vip.list2.t7')}}：</span>

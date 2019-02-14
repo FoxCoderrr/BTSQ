@@ -61,14 +61,14 @@
           </li>
           <li @click="toMsg">
             <img src="../assets/tongzhi.png" alt class="f_l">
-            <span class="f_l m_span">{{$t('mine.list.l6')}} <span class="dot f_c_red"></span> </span>
+            <span class="f_l m_span">{{$t('mine.list.l6')}} <span v-if="ifMsg" class="dot f_c_red"></span> </span>
             <span class="f_r iconfont icon-youjiantou"></span>
           </li>
-          <li @click="toBook">
+          <!-- <li @click="toBook">
             <img src="../assets/xiazai.png" alt class="f_l">
             <span class="f_l">{{$t('mine.list.l7')}}</span>
             <span class="f_r iconfont icon-youjiantou"></span>
-          </li>
+          </li> -->
         </ul>
         <ul>
           <li @click="toChat">
@@ -92,6 +92,7 @@ export default {
     return {
       uinfo:"",
       info:"",
+      ifMsg:0,
     };
   },
   components: {},
@@ -119,6 +120,27 @@ export default {
         if (res.data.code == 1) {
           that.uinfo = res.data.data;
           that.info = res.data.data.user_info;
+        } else {
+          that.$vux.toast.show({
+            text: res.data.msg,
+            type: "text",
+            position: "middle",
+            time: 1200
+          });
+        }
+      });
+      that
+      .$http({
+        url: "/user/message_list",
+        method: "post",
+        data: {
+          token: that.$store.state.user_info.token,
+          visit: 1
+        }
+      })
+      .then(function(res) {
+        if (res.data.code == 1) {
+          that.ifMsg = res.data.data.length;
         } else {
           that.$vux.toast.show({
             text: res.data.msg,
@@ -180,7 +202,10 @@ export default {
     },
     toMsg(){
       this.$router.push({
-        name: "msg"
+        name: "msg",
+        params:{
+          type:1
+        }
       });
     },
      toBook(){

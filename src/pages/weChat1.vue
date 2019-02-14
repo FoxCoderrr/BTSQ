@@ -140,6 +140,7 @@ export default {
     },
     delImg1: function(e) {
       this.data1 = "";
+      this.urll="";
       let dom = document.getElementById("handcard");
       dom.value = "";
     },

@@ -26,18 +26,20 @@
           <tr>
             <th>{{$t('mainacc.list.t1')}}</th>
             <th>{{$t('mainacc.list.t2')}}</th>
-            <th>USD{{$t('mainacc.list.t3')}}</th>
-            <th>CNY{{$t('mainacc.list.t3')}}</th>
-            <th>{{$t('mainacc.list.t5')}}</th>
+            <!-- <th>USD{{$t('mainacc.list.t3')}}</th>
+            <th>CNY{{$t('mainacc.list.t3')}}</th> -->
+            <th>{{$t('mainacc.list.t6')}}(USD)</th>
+            <!-- <th>{{$t('mainacc.list.t5')}}</th> -->
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item,index) in list" :key="index">
             <td :class="[item.amount_text>0?'f_c_red':'f_c_green']">{{item.amount_text}}</td>
             <td>{{item.price}}</td>
+            <!-- <td>{{item.total}}</td>
+            <td>{{item.cny_total}}</td> -->
             <td>{{item.total}}</td>
-            <td>{{item.cny_total}}</td>
-            <td @click="toDetail(item.id)">{{$t('mainacc.btn.b1')}}</td>
+            <!-- <td @click="toDetail(item.id)">{{$t('mainacc.btn.b1')}}</td> -->
           </tr>
         </tbody>
       </x-table>

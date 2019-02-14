@@ -9,7 +9,7 @@
           </div>
         </div>
         <span>{{name}}</span>
-        <span>{{$t('share.child3.t1')}}：{{today}} USD</span>
+        <span>{{$t('share.child3.t1')}}：{{today||"0"}}</span>
       </div>
       <div class="div_title">{{$t('share.child3.t2')}}</div>
       <div class="d_chart">
@@ -98,7 +98,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          name:"(USD)",
+          name:"",
           nameLocation:"start",
           nameGap:10,
           nameTextStyle:{

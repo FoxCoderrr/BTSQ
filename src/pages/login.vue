@@ -2,11 +2,17 @@
   <div class="wrap">
     <img v-if="$store.state.imgIf" class="start" src="../assets/start.gif" alt>
     <div class="top" v-if="!$store.state.imgIf">
-      <select class="lang" v-model="lang" @change="changeLang">
-        <option value="cn">{{$t('ch')}}</option>
-        <option value="ct">{{$t('ch1')}}</option>
-        <option value="en">{{$t('en')}}</option>
-      </select>
+      <div @click="lang_dlg=true">
+        <span v-if="$store.state.lang=='cn'">{{$t('ch')}}
+          <span class="iconfont icon-xiasanjiao"></span>
+        </span>
+        <span v-if="$store.state.lang=='ct'">{{$t('ch1')}}
+          <span class="iconfont icon-xiasanjiao"></span>
+        </span>
+        <span v-if="$store.state.lang=='en'">{{$t('en')}}
+          <span class="iconfont icon-xiasanjiao"></span>
+        </span>
+      </div>
     </div>
     <div class="d_logo" v-if="!$store.state.imgIf">
       <img src="../assets/logo.png" alt>
@@ -27,7 +33,7 @@
           ></x-input>
         </div>
       </div>
-      <div class="d_input">
+      <div class="d_input eye_div">
         <div class="f_l">{{$t('login.pwd')}}</div>
         <div class="f_r">
           <x-input
@@ -38,6 +44,7 @@
             @on-focus="focus"
             @on-blur="blur"
           ></x-input>
+          <span class="iconfont icon-yanjingbi" @touchstart="eyepwd($event)"></span>
         </div>
       </div>
     </div>
@@ -96,6 +103,24 @@
         </div>
       </div>
     </x-dialog>
+    <x-dialog v-model="lang_dlg" class="de_dialog lang_dialog" hide-on-blur>
+      <div class="dialog">
+        <ul>
+          <li :class="{active:$store.state.lang == 'en'}" @click="changeLang('en')">
+            <span>English</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+          <li :class="{active:$store.state.lang == 'ct'}" @click="changeLang('ct')">
+            <span>中文繁體</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+          <li :class="{active:$store.state.lang == 'cn'}" @click="changeLang('cn')">
+            <span>中文简体</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+        </ul>
+      </div>
+    </x-dialog>
   </div>
 </template>
 <script>
@@ -109,6 +134,7 @@ export default {
   data() {
     return {
       lang: "",
+      lang_dlg: false,
       show: false,
       usercode: "",
       identifyCode: "",
@@ -172,9 +198,31 @@ export default {
       .then(function(res) {});
   },
   methods: {
-    changeLang() {
+    eyepwd(e) {
+      $(e.target)
+        .toggleClass("icon-yanjingbi")
+        .toggleClass("icon-yanjing");
+      if (
+        $(e.target)
+          .parents(".f_r")
+          .find("input")
+          .attr("type") == "password"
+      ) {
+        $(e.target)
+          .parents(".f_r")
+          .find("input")
+          .attr("type", "text");
+      } else {
+        $(e.target)
+          .parents(".f_r")
+          .find("input")
+          .attr("type", "password");
+      }
+    },
+    changeLang(l) {
       let that = this;
-      that.setLang(that.lang);
+      that.setLang(l);
+      that.lang_dlg = false;
       that
         .$http({
           url: "/Phone/lang",
@@ -191,7 +239,7 @@ export default {
       if (that.$store.state.lang == "cn") {
         ll = 1;
       } else if (that.$store.state.lang == "ct") {
-        ll == 2;
+        ll = 2;
       } else {
         ll = 3;
       }
@@ -235,7 +283,7 @@ export default {
       if (that.$store.state.lang == "cn") {
         ll = 1;
       } else if (that.$store.state.lang == "ct") {
-        ll == 2;
+        ll = 2;
       } else {
         ll = 3;
       }
@@ -318,7 +366,7 @@ export default {
         if (that.$store.state.lang == "cn") {
           ll = 1;
         } else if (that.$store.state.lang == "ct") {
-          ll == 2;
+          ll = 2;
         } else {
           ll = 3;
         }
@@ -338,9 +386,9 @@ export default {
             if (res.data.code == 1) {
               that.$store.state.user_info = res.data.data;
               let l;
-              if (res.data.data.lang == 1) {
+              if (res.data.data.language == 1) {
                 l = "cn";
-              } else if (res.data.data.lang == 2) {
+              } else if (res.data.data.language == 2) {
                 l = "ct";
               } else {
                 l = "en";
@@ -410,7 +458,7 @@ export default {
       if (that.$store.state.lang == "cn") {
         ll = 1;
       } else if (that.$store.state.lang == "ct") {
-        ll == 2;
+        ll = 2;
       } else {
         ll = 3;
       }
@@ -430,9 +478,9 @@ export default {
           if (res.data.code == 1) {
             that.show = false;
             let l;
-            if (res.data.data.lang == 1) {
+            if (res.data.data.language == 1) {
               l = "cn";
-            } else if (res.data.data.lang == 2) {
+            } else if (res.data.data.language == 2) {
               l = "ct";
             } else {
               l = "en";
@@ -455,6 +503,7 @@ export default {
               time: 1200
             });
             that.email_code = "";
+            that.show = false;
           }
         });
     }
@@ -510,16 +559,19 @@ export default {
   color: white;
   .top {
     box-shadow: none;
-  }
-  .lang {
-    position: absolute;
-    right: 3%;
-    top: 0;
-    color: #fcb90b;
-    font-size: 0.38rem;
-    background: transparent;
-    border-color: transparent;
-    margin: 0.2rem 0 0;
+    > div {
+      position: absolute;
+      right: 3%;
+      top: 0;
+      z-index: 1;
+      color: #fcb90b;
+      font-size: 0.38rem;
+      .iconfont{
+        font-size: 0.3rem;
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
   }
 
   .d_logo {

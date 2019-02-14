@@ -7,25 +7,25 @@
     <div class="main">
       <div class="list_div">
         <ul>
-          <li @click="toCard">
+          <li @click="toCard" v-if="$store.state.lang=='cn'">
             <span class="f_l">{{$t('sysset.list.l1')}}</span>
             <span class="f_r iconfont icon-youjiantou"></span>
             <span v-if="bank" class="f_r f_c">{{$t('bind')}}</span>
             <span v-if="!bank" class="f_r">{{$t('unbind')}}</span>
           </li>
-          <li @click="toAlipay">
+          <li @click="toAlipay" v-if="$store.state.lang=='cn'">
             <span class="f_l">{{$t('sysset.list.l2')}}</span>
             <span class="f_r iconfont icon-youjiantou"></span>
             <span v-if="alipay" class="f_r f_c">{{$t('bind')}}</span>
             <span v-if="!alipay" class="f_r">{{$t('unbind')}}</span>
           </li>
-          <li @click="toWx">
+          <li @click="toWx" v-if="$store.state.lang=='cn'">
             <span class="f_l">{{$t('sysset.list.l3')}}</span>
             <span class="f_r iconfont icon-youjiantou"></span>
             <span v-if="wechat" class="f_r f_c">{{$t('bind')}}</span>
             <span v-if="!wechat" class="f_r">{{$t('unbind')}}</span>
           </li>
-          <li @click="toPaypal">
+          <li @click="toPaypal" v-if="$store.state.lang!='cn'">
             <span class="f_l">{{$t('sysset.list.l5')}}</span>
             <span class="f_r iconfont icon-youjiantou"></span>
             <span v-if="paypal" class="f_r f_c">{{$t('bind')}}</span>
@@ -33,32 +33,65 @@
           </li>
           <li>
             <span class="f_l">{{$t('sysset.list.l4')}}</span>
-            <span class="f_r lang">
-              <select v-model="lang" @change="changeLang">
-                <option value="cn">{{$t('ch')}}</option>
-                <option value="ct">{{$t('ch1')}}</option>
-                <option value="en">{{$t('en')}}</option>
-              </select>
+            <span class="f_r lang" @click="lang_dlg=true">
+              <span v-if="$store.state.lang=='cn'">
+                {{$t('ch')}}
+                <span class="iconfont icon-xiasanjiao"></span>
+              </span>
+              <span v-if="$store.state.lang=='ct'">
+                {{$t('ch1')}}
+                <span class="iconfont icon-xiasanjiao"></span>
+              </span>
+              <span v-if="$store.state.lang=='en'">
+                {{$t('en')}}
+                <span class="iconfont icon-xiasanjiao"></span>
+              </span>
             </span>
+          </li>
+          <li @click="toBook">
+            <!-- <img src="../assets/xiazai.png" alt class="f_l"> -->
+            <span class="f_l">{{$t('mine.list.l7')}}</span>
+            <span class="f_r iconfont icon-youjiantou"></span>
           </li>
         </ul>
       </div>
     </div>
+    <x-dialog v-model="lang_dlg" class="de_dialog lang_dialog" hide-on-blur>
+      <div class="dialog">
+        <ul>
+          <li :class="{active:$store.state.lang == 'en'}" @click="changeLang('en')">
+            <span>English</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+          <li :class="{active:$store.state.lang == 'ct'}" @click="changeLang('ct')">
+            <span>中文繁體</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+          <li :class="{active:$store.state.lang == 'cn'}" @click="changeLang('cn')">
+            <span>中文简体</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+        </ul>
+      </div>
+    </x-dialog>
   </div>
 </template>
 <script>
 import $ from "jquery";
+import {XDialog } from "vux";
+
 export default {
   data() {
     return {
       lang: "",
+      lang_dlg: false,
       alipay: "",
       wechat: "",
       bank: "",
-      paypal:""
+      paypal: ""
     };
   },
-  components: {},
+  components: {XDialog},
   mounted() {
     let that = this;
     mui.back = function() {
@@ -91,7 +124,7 @@ export default {
             sessionStorage.setItem("wechatnick", res.data.data.wechat_nick);
             sessionStorage.setItem("wechatimg", res.data.data.wechat_img);
           }
-          if(res.data.data.paypal){
+          if (res.data.data.paypal) {
             sessionStorage.setItem("paypal", res.data.data.paypal);
           }
         } else {
@@ -107,6 +140,11 @@ export default {
   methods: {
     back() {
       this.$router.back();
+    },
+    toBook() {
+      this.$router.push({
+        name: "book"
+      });
     },
     toCard() {
       this.$router.push({
@@ -155,20 +193,25 @@ export default {
         }
       });
     },
-    changeLang() {
-      this.setLang(this.lang);
+    changeLang(l) {
+      this.setLang(l);
       let that = this;
+      that.$vux.loading.show({
+        text: ""
+      });
       that
         .$http({
           url: "/Phone/lang",
           method: "post",
           data: {
             token: that.$store.state.user_info.token,
-            lang: that.$store.state.lang
+            lang: l
           }
         })
         .then(function(res) {
+          that.$vux.loading.hide();
           if (res.data.code == 1) {
+            that.lang_dlg = false;
           } else {
             that.$vux.toast.show({
               text: res.data.msg,
@@ -216,12 +259,20 @@ export default {
             margin-left: 0.2rem;
           }
           .lang {
-            select {
-              background: transparent;
-              border-color: #f09b0b;
-              color: #f09b0b;
-              height: 0.8rem;
-              width: 2.5rem;
+            >span{
+              display: inline-block;
+              vertical-align: sub;
+              border: 1px solid #fcb90b;
+              height: .8rem;
+              line-height: .8rem;
+              box-sizing: border-box;
+              padding: 0 0.1rem 0;
+              margin-top: 0.1rem;
+            }
+            color: #fcb90b;
+            .iconfont {
+              font-size: 0.3rem;
+              color: #fcb90b;
             }
           }
         }

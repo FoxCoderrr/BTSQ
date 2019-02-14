@@ -5,9 +5,9 @@
             <div>{{$t('msg.title.t3')}}</div>
         </div>
         <div class="main">
-            <div class="title ta_c">{{data.title}}</div>
+            <div class="title">{{data.title}}</div>
             <div class="d_time">{{data.time}}</div>
-            <div class="con" v-html="data.content"> </div>
+            <div class="con">{{data.content}}</div>
         </div>
     </div>
 </template>
@@ -22,7 +22,12 @@ export default {
   mounted() {
     let that = this;
     mui.back = function() {
-      that.$router.back();
+      that.$router.push({
+        name:"msg",
+        params:{
+          type:that.$route.params.source
+        }
+      })
       error;
     };
   },
@@ -34,7 +39,7 @@ export default {
     }
     that
       .$http({
-        url: "/news/newsInfo",
+        url: "/user/message_detail",
         method: "post",
         data: {
           token:that.$store.state.user_info.token,
@@ -43,7 +48,7 @@ export default {
       })
       .then(function(res) {
         if (res.data.code == 1) {
-          that.data = res.data.data.info;
+          that.data = res.data.data;
         } else {
           that.$vux.toast.show({
             text: res.data.msg,
@@ -57,7 +62,12 @@ export default {
   methods: {
     back() {
       let that = this;
-      that.$router.back();
+      that.$router.push({
+        name:"msg",
+        params:{
+          type:that.$route.params.source
+        }
+      })
     }
   }
 };
@@ -83,6 +93,7 @@ export default {
     .title {
       font-size: 0.4rem;
       padding: 0.4rem 0 0.1rem;
+      text-align: left;
     }
     .d_time{
       text-align: right;

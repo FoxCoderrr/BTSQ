@@ -51,12 +51,18 @@
             <td>{{list.B}}</td>
             <td>{{list.pay_B}}</td>
             <td>
-              <van-switch
+              <!-- <van-switch
                 :value="list.status"
                 size="26px"
                 active-color="#fcb90b"
                 inactive-color="#f0f0f0"
                 @input="onInput"
+              /> -->
+               <van-switch
+                :value="list.status"
+                size="26px"
+                active-color="#fcb90b"
+                inactive-color="#f0f0f0"
               />
             </td>
             <td :class="{f_c:list.status}" @click="toLink">{{$t('mining.ing')}}{{list.working}}</td>

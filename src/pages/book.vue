@@ -5,11 +5,11 @@
       <div>{{$t('book.title')}}</div>
     </div>
     <ul v-if="show">
-        <li @click="toDetail(2)">
+        <li v-if="$store.state.lang=='cn'" @click="toDetail(2)">
           <span class="f_l">BAUDCOIN（波特币）白皮书</span>
           <img class="f_r r_img" src="../assets/right1.png" alt>
         </li>
-        <li @click="toDetail(1)">
+        <li v-if="$store.state.lang!='cn'" @click="toDetail(1)">
           <span class="f_l">BAUDCOIN white-book</span>
           <img class="f_r r_img" src="../assets/right1.png" alt>
         </li>
@@ -33,7 +33,7 @@ export default {
     let that = this;
     mui.back = function() {
       that.$router.push({
-          name:"mine"
+          name:"syssetting"
       });
       error;
     };
@@ -42,7 +42,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-          name:"mine"
+          name:"syssetting"
       });
     },
     toDetail(i){

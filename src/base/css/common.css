@@ -415,3 +415,39 @@ body{
 .info .van-collapse-item__content{
   border-bottom: 1px solid #12161c;
 }
+.lang_dialog .weui-dialog{
+  border-radius: 10px;
+}
+.lang_dialog ul{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.05rem 10% 0.05rem;
+}
+.lang_dialog ul li{
+  color: white;
+  overflow: hidden;
+  color: #8f8f9b;
+  line-height: 1.4rem;
+  font-size: 0.4rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+.lang_dialog ul li:last-child{
+  border-bottom: 0;
+}
+.lang_dialog ul li>span:first-child{
+  float: left;
+}
+.lang_dialog ul li>span:last-child{
+  float: right;
+}
+.lang_dialog ul li .iconfont{
+  opacity: 0;
+  font-size: .6rem;
+}
+.lang_dialog ul li.active{
+  color: #fcb90b;
+}
+.lang_dialog ul li.active .iconfont{
+  color: #fcb90b;
+  opacity: 1;
+}

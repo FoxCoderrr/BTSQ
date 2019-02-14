@@ -9,11 +9,17 @@
         alt
       >
       <div>{{$t('reg.title')}}</div>
-      <select class="lang" v-model="lang" @change="changeLang">
-        <option value="cn">{{$t('ch')}}</option>
-        <option value="ct">{{$t('ch1')}}</option>
-        <option value="en">{{$t('en')}}</option>
-      </select>
+      <div class="div" @click="lang_dlg=true">
+        <span v-if="$store.state.lang=='cn'">{{$t('ch')}}
+          <span class="iconfont icon-xiasanjiao"></span>
+        </span>
+        <span v-if="$store.state.lang=='ct'">{{$t('ch1')}}
+          <span class="iconfont icon-xiasanjiao"></span>
+        </span>
+        <span v-if="$store.state.lang=='en'">{{$t('en')}}
+          <span class="iconfont icon-xiasanjiao"></span>
+        </span>
+      </div>
     </div>
     <div class="d_logo">
       <img src="../assets/logo.png" alt>
@@ -168,6 +174,24 @@
         </div>
       </div>
     </x-dialog>
+    <x-dialog v-model="lang_dlg" class="de_dialog lang_dialog" hide-on-blur>
+      <div class="dialog">
+        <ul>
+          <li :class="{active:$store.state.lang == 'en'}" @click="changeLang('en')">
+            <span>English</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+          <li :class="{active:$store.state.lang == 'ct'}" @click="changeLang('ct')">
+            <span>中文繁體</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+          <li :class="{active:$store.state.lang == 'cn'}" @click="changeLang('cn')">
+            <span>中文简体</span>
+            <span class="iconfont icon-duihao"></span>
+          </li>
+        </ul>
+      </div>
+    </x-dialog>
   </div>
 </template>
 <script>
@@ -177,6 +201,7 @@ export default {
   data() {
     return {
       lang: "",
+      lang_dlg: false,
       types: ["password", "password", "password", "password"],
       first: true,
       second: false,
@@ -190,7 +215,7 @@ export default {
       uu_pwd1: "",
       code: "",
       yqm: "",
-      btn_msg: this.$t("code"),
+      btn_msg: this.$t('code'),
       ifAgree: false,
       time: 60,
       protocal: ""
@@ -248,9 +273,10 @@ export default {
           .attr("type", "password");
       }
     },
-    changeLang() {
+    changeLang(l) {
       let that = this;
-      that.setLang(that.lang);
+      that.setLang(l);
+      that.lang_dlg = false;
       that
         .$http({
           url: "/Phone/lang",
@@ -479,6 +505,19 @@ export default {
   box-sizing: border-box;
   .top {
     box-shadow: none;
+    >.div{
+      position: absolute;
+      right: 3%;
+      top: 0;
+      z-index: 1;
+      color: #fcb90b;
+      font-size: 0.38rem;
+      .iconfont{
+        font-size: 0.3rem;
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
   }
 
   .lang {

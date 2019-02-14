@@ -10,7 +10,7 @@ export default new vuex.Store({
     imgIf:true,
     n:0,
     bot:"",
-    lang:"cn",
+    lang: localStorage.getItem("lang")||"cn",
     bshow:true,
     top_title:"捐赠",
     active_wallet:{},

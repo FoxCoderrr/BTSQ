@@ -12,7 +12,7 @@
             </li>
             <li>
                 <span>{{$t('trade.child3.list.t2')}}：</span>
-                <span :class="[info.trade_type_text_color=='green'?'f_c_red':'f_c_green']">{{info.trade_type_text}}</span>
+                <span :class="[info.trade_type_text_color=='red'?'f_c_red':'f_c_green']">{{info.trade_type_text}}</span>
             </li>
             <li>
                 <span>{{$t('trade.child2.list.t2')}}：</span>

@@ -2,7 +2,7 @@
   <div class="wrap">
     <div class="top">
       <img @click="back" class="back_img" src="../assets/nav_back.png" alt>
-      <div>{{$store.state.active_wallet.name}}</div>
+      <div>{{title}}</div>
     </div>
     <div class="total_assets">
       <span>{{number}}</span>
@@ -18,8 +18,8 @@
         v-model="type"
       >
         <tab-item @click.native="navTap(0)">{{$t('wallet.sorts.s1')}}</tab-item>
-        <tab-item @click.native="navTap(1)">{{$t('wallet.sorts.s2')}}</tab-item>
-        <tab-item @click.native="navTap(2)">{{$t('wallet.sorts.s3')}}</tab-item>
+        <tab-item v-if="$route.params.type==1" @click.native="navTap(1)">{{$t('wallet.sorts.s2')}}</tab-item>
+        <tab-item v-if="$route.params.type==0" @click.native="navTap(2)">{{$t('wallet.sorts.s3')}}</tab-item>
         <tab-item @click.native="navTap(3)">{{$t('wallet.sorts.s4')}}</tab-item>
       </tab>
       <div class="scroll_div">
@@ -58,15 +58,15 @@
 
     <div class="bot_btn">
       <div>
-        <div @click="toTransfer">
+        <div v-if="$route.params.type==0" @click="toTransfer">
           <img src="../assets/transfer.png" alt>
           <span>{{$t('wallet.btn.b1')}}</span>
         </div>
-        <div @click="toProceeds">
+        <div v-if="$route.params.type==1" @click="toProceeds">
           <img src="../assets/receive.png" alt>
           <span>{{$t('wallet.btn.b2')}}</span>
         </div>
-        <div class="line"></div>
+        <!-- <div class="line"></div> -->
       </div>
     </div>
   </div>
@@ -107,6 +107,15 @@ export default {
       that.$router.back();
       error;
     };
+  },
+  computed:{
+    title(){
+      if(this.$route.params.type==0){
+        return this.$t('w1')
+      }else{
+        return this.$t('w2')
+      }
+    }
   },
   activated() {
     let that = this;
@@ -207,11 +216,12 @@ export default {
     },
     getlist(i) {
       let t = "";
-      t = this.type;
       if (this.type == 0) {
         t = "";
-      } else if (this.type == 3) {
-        t = "6";
+      } else if (this.type == 1||this.type==2) {
+        t = "1";
+      }else{
+        t="2"
       }
       let that = this;
       if(i){
@@ -224,8 +234,10 @@ export default {
           data: {
             token: that.$store.state.user_info.token,
             p: that.page,
+            pase_size:20,
             type: t,
-            id: that.$store.state.active_wallet.id
+            id: 1,
+            wallet_type: that.$route.params.type+1,
           }
         })
         .then(function(res) {

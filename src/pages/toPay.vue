@@ -55,6 +55,61 @@
           </span>
         </li>-->
       </ul>
+      <div class="ul_title">{{$t('new.a')}}</div>
+      <ul>
+        <li>
+          <span>{{$t('new.b')}}：</span>
+          <span>
+            <div v-if="$store.state.lang=='cn'" :class="{f_c:way==0}" @click="way=0">
+              <span
+                class="iconfont"
+                :class="[way==0?'icon-danxuanxuanzhong f_c':'icon-yuanxingweixuanzhong']"
+              ></span>
+              {{$t('new.c')}}
+            </div>
+            <div v-if="$store.state.lang=='cn'" :class="{f_c:way==1}" @click="way=1">
+              <span
+                class="iconfont"
+                :class="[way==1?'icon-danxuanxuanzhong f_c':'icon-yuanxingweixuanzhong']"
+              ></span>
+              {{$t('new.d')}}
+            </div>
+            <div v-if="$store.state.lang=='cn'" :class="{f_c:way==2}" @click="way=2">
+              <span
+                class="iconfont"
+                :class="[way==2?'icon-danxuanxuanzhong f_c':'icon-yuanxingweixuanzhong']"
+              ></span>
+              {{$t('new.e')}}
+            </div>
+            <div v-if="$store.state.lang!='cn'" :class="{f_c:way==3}" @click="way=3">
+              <span
+                class="iconfont"
+                :class="[way==3?'icon-danxuanxuanzhong f_c':'icon-yuanxingweixuanzhong']"
+              ></span>
+              Paypal
+            </div>
+          </span>
+        </li>
+        <li>
+          <span>{{$t('new.a')}}：</span>
+          <span>
+            <div class="up_div">
+              <span class="icon f_c">+</span>
+              <img v-if="data1" :src="data1">
+              <input
+                name="img"
+                :disabled="data1!=''"
+                type="file"
+                id="handcard"
+                @change="pushImg1($event)"
+                accept="image/jpeg, image/png, image/gif"
+                alt
+              >
+              <span class="clear iconfont icon-shanchu1" v-if="urll" @click="delImg1($event)"></span>
+            </div>
+          </span>
+        </li>
+      </ul>
       <div class="d_btn">
         <button class="btn" @click="sub">{{$t('topay.tip.t1')}}</button>
       </div>
@@ -72,6 +127,9 @@ import src from "../assets/logo.png";
 export default {
   data() {
     return {
+      way: 0,
+      data1: "",
+      urll: "",
       big_if: false,
       src: src,
       info: {}
@@ -121,6 +179,75 @@ export default {
         }
       });
     },
+    // 上传
+    pushImg1: function(e) {
+      let file = e.target,
+        reader = new FileReader(),
+        that = this,
+        _name,
+        _fileName;
+      _name = file.value;
+      _fileName = _name.substring(_name.lastIndexOf(".") + 1).toLowerCase();
+      // if (_fileName !== "png" && _fileName !== "jpg") {
+      //   that.$vux.toast.show({
+      //     text: "请上传图片类型文件！",
+      //     type: "cancel",
+      //     position: "middle",
+      //     time: 1200
+      //   });
+      // }else{
+      reader.readAsDataURL(file.files[0]);
+      if (file.files[0].size > 10 * 1024 * 1024) {
+        that.$vux.toast.show({
+          text: that.$t("ups.d"),
+          type: "warn",
+          position: "middle",
+          time: 1500
+        });
+      } else {
+        that.$vux.loading.show({
+          text: that.$t("load.uping")
+        });
+        reader.onload = function() {
+          let result = this.result;
+
+          // that.data1 = result;
+
+          var image = new FormData();
+          image.append("file", e.target.files[0]);
+          image.append("type", "payimg");
+          image.append("token", that.$store.state.user_info.token);
+          that
+            .$http({
+              url: "/Transaction/upload_pic",
+              method: "post",
+              data: image
+            })
+            .then(function(res) {
+              that.$vux.loading.hide();
+              if (res.data.code == 1) {
+                that.data1 = result;
+                that.urll = res.data.data;
+              } else {
+                that.$vux.toast.show({
+                  text: res.data.msg,
+                  type: "cancel",
+                  position: "middle",
+                  time: 1200
+                });
+              }
+            });
+        };
+      }
+
+      // }
+    },
+    delImg1: function(e) {
+      this.data1 = "";
+      this.urll="";
+      let dom = document.getElementById("handcard");
+      dom.value = "";
+    },
     showImg() {
       this.big_if = true;
     },
@@ -135,16 +262,18 @@ export default {
           method: "post",
           data: {
             token: that.$store.state.user_info.token,
-            order_id: that.$route.params.id1
+            order_id: that.$route.params.id1,
+            payment_method:Number(that.way)+1,
+            voucher:that.urll,
           }
         })
         .then(function(res) {
           that.$vux.loading.hide();
           if (res.data.code == 1) {
             that.$vux.alert.show({
-              title: that.$t('topay.tip.t3'),
-              content: that.$t('topay.tip.t2'),
-              buttonText: that.$t('topay.tip.t4'),
+              title: that.$t("topay.tip.t3"),
+              content: that.$t("topay.tip.t2"),
+              buttonText: that.$t("topay.tip.t4"),
               onShow() {},
               onHide() {
                 that.dialog0 = false;
@@ -224,8 +353,10 @@ export default {
       li {
         padding: 0.3rem 0 0.3rem;
         border-bottom: 1px solid #323b46;
-        span {
-          display: inline-block;
+        overflow: hidden;
+        > span {
+          float: left;
+          width: calc(100% - 2.5rem);
           color: #dee2ea;
           img {
             width: 2rem;
@@ -233,8 +364,61 @@ export default {
             display: inline-block;
             vertical-align: top;
           }
+          > div {
+            display: inline-block;
+            margin: 0 0.2rem 0;
+            > span {
+              width: auto !important;
+            }
+          }
+          .up_div {
+            clear: both;
+            width: 4rem;
+            height: 3.5rem;
+            margin: 0 auto;
+            border: 1px solid #fcb90b;
+            position: relative;
+            text-align: center;
+            .icon {
+              position: absolute;
+              left: 50%;
+              top: 0.8rem;
+              font-size: 1.4rem;
+              transform: translateX(-50%);
+            }
+            .jia {
+              position: absolute;
+              left: 50%;
+              top: 2.1rem;
+              color: #fcb90b;
+              transform: translateX(-50%);
+              white-space: nowrap;
+            }
+            img {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+            }
+            input {
+              opacity: 0;
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+            .clear {
+              font-size: 0.72rem;
+              color: rgba(255, 255, 255, 0.8);
+              position: absolute;
+              right: -0.8rem;
+              top: -0.4rem;
+            }
+          }
         }
-        span:first-child {
+        > span:first-child {
           width: 2.5rem;
           color: #8f8f9b;
         }

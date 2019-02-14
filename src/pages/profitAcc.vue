@@ -59,7 +59,7 @@
             </thead>
             <tbody>
             <tr v-for="(item,index) in list">
-            <td :class="[item.amount_text>0?'f_c_red':'f_c_green']">{{item.amount_text}}</td>
+            <td :class="[item.amount_text>=0?'f_c_red':'f_c_green']">{{item.amount_text}}</td>
                 <td>
                     <span>{{item.time1}}</span>
                     <span>{{item.time2}}</span>
