@@ -530,7 +530,7 @@ export default {
   > div {
     display: block;
     margin: 50vw auto 0;
-    background: white;
+    background: rgb(145, 144, 144);
     width: 80%;
     border-radius: 4px;
   }
@@ -543,7 +543,7 @@ export default {
   .iconfont {
     display: inline-block;
     margin-right: 0.2rem;
-    color: #888;
+    color: whitesmoke;
     font-size: 0.7rem;
   }
 }
@@ -673,16 +673,16 @@ export default {
       padding: 0;
     }
     ::-webkit-input-placeholder {
-      color: #888;
+      color: rgb(121, 120, 120);
     }
     ::-moz-input-placeholder {
-      color: #888;
+     color: rgb(121, 120, 120);
     }
     ::-o-input-placeholder {
-      color: #888;
+      color: rgb(121, 120, 120);
     }
     ::-ms-input-placeholder {
-      color: #888;
+      color: rgb(121, 120, 120);
     }
     color: #333;
     .dia_title {
@@ -705,7 +705,7 @@ export default {
       line-height: 1.1rem;
       background: transparent;
       font-size: 0.44rem;
-      border-top: 1px solid #f0f0f0;
+      border-top: 1px solid #bbb;
     }
     .code_btn:active {
       background: #f0f0f0;

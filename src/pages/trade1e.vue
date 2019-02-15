@@ -59,7 +59,7 @@
                   :placeholder="$t('trade.child1.buy.i1')"
                 >
                 <span class="spans">{{$t('trade.child1.buy.t1')}}：{{buyData.cny}} ￥</span>
-                <span v-if="!b_price" class="po_ab">{{$t('trade.child1.buy.l1')}}:{{best_buy_price}}</span>
+                <span v-if="Number(b_price)==Number(best_buy_price)" class="po_ab">{{$t('trade.child1.buy.l1')}}</span>
               </div>
             </div>
             <div>
@@ -117,7 +117,7 @@
                   :placeholder="$t('trade.child1.sell.i1')"
                 >
                 <span class="spans">{{$t('trade.child1.sell.t1')}}：{{sellData.cny}} ￥</span>
-                <span v-if="!s_price" class="po_ab">{{$t('trade.child1.sell.l1')}}:{{best_sell_price}}</span>
+                <span v-if="Number(s_price)==Number(best_sell_price)" class="po_ab">{{$t('trade.child1.sell.l1')}}</span>
               </div>
             </div>
             <div>
@@ -300,7 +300,7 @@ export default {
       }
     });
     that.getInfo();
-    window.t = setInterval(that.getInfo, 3000);
+    // window.t = setInterval(that.getInfo, 3000);
     // 个人账户资金
     that
       .$http({
@@ -376,7 +376,7 @@ export default {
       this.type = i;
       clearInterval(window.t);
       this.getInfo();
-      window.t = setInterval(that.getInfo, 3000);
+      // window.t = setInterval(that.getInfo, 3000);
     },
     toDetail() {
       this.$router.push({
@@ -435,10 +435,10 @@ export default {
             that.coin_info = res.data.data;
             if (that.type == 0) {
               that.best_buy_price = res.data.data.best_buy_num;
-              // that.b_price = res.data.data.best_buy_num;
+              that.b_price = res.data.data.best_buy_num;
             } else {
               that.best_sell_price = res.data.data.best_sell_num;
-              // that.s_price = res.data.data.best_sell_num;
+              that.s_price = res.data.data.best_sell_num;
             }
           } else {
             that.$vux.toast.show({
@@ -729,7 +729,7 @@ export default {
         padding: 0 0.4rem 0.4rem;
         font-size: 0.4rem;
         line-height: 0.6rem;
-        color: #000;
+        color: white;
       }
     }
   }

@@ -460,16 +460,16 @@ export default {
   }
   .de_dialog {
     ::-webkit-input-placeholder {
-      color: #888;
+      color: rgb(121, 120, 120);
     }
     ::-moz-input-placeholder {
-      color: #888;
+     color: rgb(121, 120, 120);
     }
     ::-o-input-placeholder {
-      color: #888;
+      color: rgb(121, 120, 120);
     }
     ::-ms-input-placeholder {
-      color: #888;
+      color: rgb(121, 120, 120);
     }
     color: #333;
     .dia_title {

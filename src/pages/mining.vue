@@ -546,7 +546,7 @@ export default {
       display: flex;
       .btn:first-child {
         border-right: 1px solid #f0f0f0;
-        color: #333 !important;
+        color: #333;
       }
     }
     .btn {

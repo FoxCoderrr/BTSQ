@@ -417,6 +417,8 @@ body{
 }
 .lang_dialog .weui-dialog{
   border-radius: 10px;
+  background: #717171;
+  border: 1px solid #bbb;
 }
 .lang_dialog ul{
   width: 100%;
@@ -426,10 +428,9 @@ body{
 .lang_dialog ul li{
   color: white;
   overflow: hidden;
-  color: #8f8f9b;
   line-height: 1.4rem;
   font-size: 0.4rem;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid white;
 }
 .lang_dialog ul li:last-child{
   border-bottom: 0;
@@ -450,4 +451,29 @@ body{
 .lang_dialog ul li.active .iconfont{
   color: #fcb90b;
   opacity: 1;
+}
+
+
+body .weui-dialog{
+  background: #717171;
+  color: white;
+  border: 1px solid #bbb;
+}
+.wrap .de_dialog input{
+  background: #bbb;
+}
+body .weui-dialog__bd{
+  color: rgba(255, 255, 255, .8);
+}
+body .weui-dialog__title{
+  color: white;
+}
+body .weui-dialog__btn_default{
+  color: white;
+}
+body .wrap .de_dialog .dia_btns .btn:first-child{
+  color: white!important;
+}
+body .wrap .no_dialog .no_title .iconfont{
+  color: white!important;
 }
