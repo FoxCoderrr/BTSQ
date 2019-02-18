@@ -145,7 +145,7 @@ export default {
                   position: "middle",
                   time: 1500
                 });
-                that.u_code = res.data.data;
+                that.u_code = res.data.data.think.phone_code.code;
               } else {
                 that.$vux.toast.show({
                   text: res.data.msg,
@@ -200,7 +200,7 @@ export default {
                   position: "middle",
                   time: 1500
                 });
-                that.u_code = res.data.data;
+                that.u_code1 = res.data.data.think.new_phone_code.code;
               } else {
                 that.$vux.toast.show({
                   text: res.data.msg,
