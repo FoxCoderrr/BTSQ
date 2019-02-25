@@ -156,7 +156,7 @@
             <div>
               <span class="f_l">{{$t('trade.child1.sell.l5')}}：</span>
               <div class="f_r">
-                <span class="span">{{sellData.fee}} USD</span>
+                <span class="span">{{sellData.fee}} BAUD</span>
               </div>
             </div>
             <div>
@@ -273,7 +273,7 @@ export default {
       } else {
         sum1 = (parseFloat(that.s_price) * parseFloat(that.s_num)).toFixed(2);
         sum2 = (sum1 * parseFloat(that.ratio)).toFixed(2);
-        fee = (parseFloat(sum1) * parseFloat(that.ratio1)).toFixed(2);
+        fee = (parseFloat(that.s_num) * parseFloat(that.ratio1)).toFixed(3);
       }
       return {
         cny: cny,
@@ -407,7 +407,7 @@ export default {
     },
     percent(x) {
       let that = this;
-      that.s_num = (parseFloat(that.max_sell_num) / parseFloat(x)).toFixed(2);
+      that.s_num = (parseFloat(that.max_sell_num) * parseFloat(x)).toFixed(3);
     },
     tip() {
       this.dialog = true;

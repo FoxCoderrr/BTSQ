@@ -6,9 +6,12 @@
     </div>
     <div class="main">
       <div class="head_info">
-        <span>
-          <span>{{usd}}</span> USD
-        </span>
+        <!-- <span>
+          <span>{{baud}}</span> （BAUD）
+        </span> -->
+        <div class="ta_c">
+          <span>{{baud}} BAUD</span> ≈ <span>{{usd}} USD</span>
+        </div>
         <!-- <div class="info">
           <div>
             <span :class="{f_c:type==0}" @click="navTap(0)">收款</span>
@@ -81,6 +84,7 @@ export default {
     return {
         type:0,
         usd:"0.00",
+        baud:"0.00",
         list:[]
     };
   },
@@ -110,6 +114,7 @@ export default {
       .then(function(res) {
         if (res.data.code == 1) {
           that.usd = res.data.data.usd;
+          that.baud = res.data.data.baud;
           for(let v of res.data.data.list){
             v.time1 = v.create_time.split(" ")[0];
             v.time2 = v.create_time.split(" ")[1];
@@ -162,11 +167,15 @@ export default {
         display: block;
         text-align: center;
         font-size: 0.44rem;
-        margin-bottom: 0.1rem;
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.3rem;
         > span {
           font-size: 0.58rem;
         }
+      }
+      >div{
+        font-size: 0.44rem;
+        padding-top: 0.1rem;
+        padding-bottom: 0.8rem;
       }
       > img {
         margin: 0.4rem auto;

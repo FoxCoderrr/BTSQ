@@ -29,6 +29,7 @@
             <!-- <th>USD{{$t('mainacc.list.t3')}}</th>
             <th>CNY{{$t('mainacc.list.t3')}}</th> -->
             <th>{{$t('mainacc.list.t6')}}(USD)</th>
+            <th>{{$t('profitacc.list.t3')}}</th>
             <!-- <th>{{$t('mainacc.list.t5')}}</th> -->
           </tr>
         </thead>
@@ -39,6 +40,7 @@
             <!-- <td>{{item.total}}</td>
             <td>{{item.cny_total}}</td> -->
             <td>{{item.total}}</td>
+            <td>{{item.type_text}}</td>
             <!-- <td @click="toDetail(item.id)">{{$t('mainacc.btn.b1')}}</td> -->
           </tr>
         </tbody>

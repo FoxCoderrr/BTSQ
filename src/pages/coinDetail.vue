@@ -5,8 +5,8 @@
       <div>{{title}}</div>
     </div>
     <div class="total_assets">
-      <span>{{number}}</span>
-      <span>{{usdt}}USD≈{{cny}}￥</span>
+      <span>{{number}}<span class="new_add"> <span v-if="$route.params.type==1"> ( USD )</span><span v-if="$route.params.type==0"> ( BAUD )</span></span></span>
+      <span>{{usdt}} USD ≈ {{cny}} ￥</span>
     </div>
     <div class="as_div">
       <tab
@@ -271,6 +271,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.new_add{
+  font-size: 0.42rem;
+}
 .wrap {
   font-size: 0.36rem;
   width: 100%;

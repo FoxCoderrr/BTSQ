@@ -417,7 +417,7 @@ body{
 }
 .lang_dialog .weui-dialog{
   border-radius: 10px;
-  background: #717171;
+  background: #1A212A;
   border: 1px solid #bbb;
 }
 .lang_dialog ul{
@@ -455,7 +455,7 @@ body{
 
 
 body .weui-dialog{
-  background: #717171;
+  background: #1A212A;
   color: white;
   border: 1px solid #bbb;
 }

@@ -8,6 +8,7 @@
         bar-active-color="#f0b90b"
         active-color="#f0b90b"
         :scroll-threshold="5"
+        v-model.number="type"
       >
         <tab-item selected @click.native="navTap(0)">{{$t('share.child1.title')}}</tab-item>
         <tab-item @click.native="navTap(1)">{{$t('share.child2.title')}}</tab-item>
@@ -23,7 +24,9 @@ import { Tab, TabItem } from "vux";
 
 export default {
   data() {
-    return {};
+    return {
+      type:0,
+    };
   },
   components: {
     Tab,
@@ -37,6 +40,13 @@ export default {
       });
       error;
     };
+    this.$nextTick(() => {
+      if (this.$store.state.n1) {
+        this.type = Number(this.$store.state.n1);
+      } else {
+        this.type = 0;
+      }
+    });
   },
   methods: {
     back() {

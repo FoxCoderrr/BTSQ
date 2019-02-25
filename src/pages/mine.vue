@@ -17,7 +17,7 @@
           </span>
           <span>
             <span class="f_c f_l">ID：{{info.id}}</span>
-            <span class="c_span">{{$t('mine.top.t1')}}：<span>{{uinfo.contribution}}</span></span>
+            <span class="c_span" @click="toContribute">{{$t('mine.top.t1')}}：<span>{{uinfo.contribution}}</span></span>
           </span>
         </div>
       </div>
@@ -30,7 +30,7 @@
         </div>
         <div @click="toLink(1)">
           <div>
-            <span>{{$t('mine.top.t3')}}（USD）</span>
+            <span>{{$t('mine.top.t3')}}（BAUD）</span>
             <span>{{uinfo.income}}</span>
           </div>
         </div>
@@ -181,6 +181,7 @@ export default {
       });
     },
     toShare() {
+      this.$store.state.n1 = 0;
       this.$router.push({
         name: "myshare"
       });
@@ -223,6 +224,12 @@ export default {
           name: "mainacc"
         });
       }
+    },
+    toContribute(){
+      this.$store.state.n1 = 2;
+      this.$router.push({
+        name:"mycontribute"
+      })
     }
   }
 };

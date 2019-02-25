@@ -129,14 +129,15 @@ export default {
         dataZoom: [
           {
             type: "inside",
-            startValue: that.times.length-5,
+            startValue: that.times.length-5>0?that.times.length-5:0,
             endValue: that.times.length-1
           }
         ],
         series: [
           {
             data: that.yvalues,
-            type: "line",
+            type: "bar",
+            barMaxWidth:40,
             lineStyle:{
               color:"white"
             },

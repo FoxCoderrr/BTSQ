@@ -9,6 +9,7 @@ export default new vuex.Store({
     a: 1,
     imgIf:true,
     n:0,
+    n1:"",
     bot:"",
     lang: localStorage.getItem("lang")||"cn",
     bshow:true,

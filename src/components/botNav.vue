@@ -50,9 +50,9 @@ export default {
   },
   mounted(){
     let that = this;
-    $(window).resize(function () { 
-      that.$store.state.bshow = !that.$store.state.bshow;
-    })
+    // $(window).resize(function () {
+    //   that.$store.state.bshow = !that.$store.state.bshow;
+    // })
   },
   methods: {
     navTap(id,text) {
