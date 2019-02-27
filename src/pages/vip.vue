@@ -245,7 +245,7 @@
               </li>
               <li>
                 <span>{{$t('vip.list2.t6')}}：</span>
-                <span>{{$t('vip.twice')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}600{{$t('vip.usd')}}</span>
+                <span>{{$t('vip.once')}} / {{$t('vip.week')}}，{{$t('vip.limit')}}600{{$t('vip.usd')}}</span>
               </li>
               <!-- <li>
                 <span>{{$t('vip.list2.t7')}}：</span>

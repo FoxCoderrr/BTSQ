@@ -201,7 +201,7 @@ export default {
           });
           that
             .$http({
-              url: "/Transaction/max_sell_tips",
+              url: "/Transaction/cancel_trade",
               method: "post",
               data: {
                 token: that.$store.state.user_info.token,
@@ -217,6 +217,7 @@ export default {
                   position: "middle",
                   time: 1200
                 });
+                that.list = [];
                 that.getlist(1);
               } else {
                 that.$vux.toast.show({

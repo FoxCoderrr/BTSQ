@@ -65,7 +65,7 @@
             <div>
               <span class="f_l">{{$t('trade.child1.buy.l3')}}：</span>
               <div class="f_r">
-                <span class="span">0-{{buyData.max}} {{$store.state.active_market.name}}</span>
+                <span class="span">{{buyData.min}} - {{buyData.max}} {{$store.state.active_market.name}}</span>
               </div>
             </div>
             <div>
@@ -207,7 +207,9 @@ export default {
       u_usd: "",
       u_coin: "",
       max_sell_num: "",
-      tips: ""
+      tips: "",
+      min_price:0,
+      max_price:0
     };
   },
   components: {
@@ -221,22 +223,26 @@ export default {
       let that = this;
       let cny = "";
       let max = "";
+      let min = "";
       let sum1 = "";
       let sum2 = "";
       // let fee = "";
       if (that.b_price == "") {
         cny = 0;
-        if (that.best_buy_price.split(" ")[0] == 0) {
-          max = 0;
-        } else {
-          max = (
-            parseFloat(that.u_usd) /
-            parseFloat(that.best_buy_price.split(" ")[0])
-          ).toFixed(2);
-        }
+        max = "--";
+        min = "--";
+        // if (that.best_buy_price.split(" ")[0] == 0) {
+        //   max = 0;
+        // } else {
+        //   max = (
+        //     parseFloat(that.u_usd) /
+        //     parseFloat(that.best_buy_price.split(" ")[0])
+        //   ).toFixed(2);
+        // }
       } else {
         cny = (parseFloat(that.b_price) * parseFloat(that.ratio)).toFixed(2);
-        max = (parseFloat(that.u_usd) / parseFloat(that.b_price)).toFixed(2);
+          min = "1";
+          max = (parseFloat(that.max_price) / parseFloat(that.b_price)).toFixed(2);
       }
       if (that.b_price == "" || that.b_num == "") {
         sum1 = 0;
@@ -251,7 +257,8 @@ export default {
         cny: cny,
         sum1: sum1,
         sum2: sum2,
-        max: max
+        max: max,
+        min: min,
         // fee:fee,
       };
     },
@@ -299,6 +306,20 @@ export default {
         this.type = 0;
       }
     });
+    that
+      .$http({
+        url: "http://btsq.qilinpz.com/api/Transaction/buy_range",
+        method: "post",
+        data: {
+          token: that.$store.state.user_info.token,
+        }
+      })
+      .then(function(res) {
+        if (res.data.code == 1) {
+          that.min_price = res.data.data.min;
+          that.max_price = res.data.data.max;
+        }
+      });
     that.getInfo();
     // window.t = setInterval(that.getInfo, 3000);
     // 个人账户资金
@@ -484,7 +505,7 @@ export default {
             } else {
               that.$vux.toast.show({
                 text: res.data.msg,
-                type: "text",
+                type: "cancel",
                 position: "middle",
                 time: 1200
               });
@@ -493,7 +514,7 @@ export default {
       } else {
         that.$vux.toast.show({
           text: that.$t("tip.full_tip"),
-          type: "text",
+          type: "cancel",
           position: "middle",
           time: 1200
         });
@@ -533,7 +554,7 @@ export default {
             } else {
               that.$vux.toast.show({
                 text: res.data.msg,
-                type: "text",
+                type: "cancel",
                 position: "middle",
                 time: 1200
               });
@@ -542,7 +563,7 @@ export default {
       } else {
         that.$vux.toast.show({
           text: that.$t("tip.full_tip"),
-          type: "text",
+          type: "cancel",
           position: "middle",
           time: 1200
         });

@@ -63,6 +63,7 @@
                 size="26px"
                 active-color="#fcb90b"
                 inactive-color="#f0f0f0"
+                disabled
               />
             </td>
             <td :class="{f_c:list.status}" @click="toLink">{{$t('mining.ing')}}{{list.working}}</td>
